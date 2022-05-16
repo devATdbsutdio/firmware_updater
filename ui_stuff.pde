@@ -3,7 +3,7 @@ UI elements:
  1. [*][LIST] Select serial port.
  2. [*][Button] Refresh Ports.
  3. [*][Button] Load binary.
- 4. [-][Text] show binary name.
+ 4. [*][Text] show binary name.
  5. [-][Button] Upload to HW.
  6. [TBD] - [Toggle] upload loop.
  6. [TBD] - [Button] get latest firmware.
@@ -13,12 +13,16 @@ UI elements:
 
 String UI_props_file = "props.properties";
 
+
+
 // font-aweosme icons: https://fontawesome.com/v5/cheatsheet
 int refresh_ico = #00f021;
+int file_ico = #00f15b;
+//int upload_ico = #00f0ab;
+//int upload_ico = #00f074;
+int upload_ico = #00f061;
 int toggle_on_ico = #00f205;
 int toggle_off_ico = #00f204;
-int upload_ico = #00f0ab;
-int file_ico = #00f15b;
 
 import controlP5.*;
 ControlP5 cp5;
@@ -29,6 +33,11 @@ Println console;
 Icon refresh;
 ScrollableList serialListMenu;
 Icon uploadFile;
+Textarea binFileLabel;
+
+Button b;
+Icon burnFirmware;
+Textlabel burn;
 
 
 int buffGapWidth = 10;
@@ -43,9 +52,10 @@ void setupOnScreenConsosle(ControlFont f) {
     .setSize(width - buffGapWidth*2, height-(consoleYPos+buffGapWidth))
     .setFont(f)
     .setLineHeight(13)
-    .setColor(100)
+    .setColor(color(80, 90, 90))
     .setColorBackground(color(#1D1F21))
     .setColorForeground(color(#F0C674))
+    .enableCollapse()
     ;
   console = cp5.addConsole(myTextarea);
 }
@@ -76,7 +86,7 @@ void createSerialPortsMenu(ControlFont f) {
 
   // Get position related to refresh icon
   float[] position = {
-    refresh.getPosition()[0]+refresh.getWidth()+10,
+    refresh.getPosition()[0]+refresh.getWidth()+buffGapWidth,
     refresh.getPosition()[1]
   };
 
@@ -87,7 +97,7 @@ void createSerialPortsMenu(ControlFont f) {
     .setBarHeight(objHeights)
     .setFont(f)
     .setLabel("Ports ...")
-    .setColorLabel(150)
+    .setColorLabel(washed_text_color)
     .setItemHeight(objHeights)
     .addItems(workablePortsArray)
     .setType(ScrollableList.DROPDOWN) // currently supported DROPDOWN and LIST
@@ -98,7 +108,7 @@ void createSerialPortsMenu(ControlFont f) {
 void createUploadFileButton() {
   // Get position related to refresh icon
   float[] position = {
-    serialListMenu.getPosition()[0]+serialListMenu.getWidth()+10*2,
+    serialListMenu.getPosition()[0]+serialListMenu.getWidth()+buffGapWidth*2,
     serialListMenu.getPosition()[1]
   };
 
@@ -110,6 +120,49 @@ void createUploadFileButton() {
     .setFontIcons(file_ico, file_ico)
     .setSwitch(false)
     //.setColorBackground(color(255, 100))
+    .hideBackground()
+    ;
+}
+
+void createBinFileNameDisplay(ControlFont f) {
+  // Get position related to refresh icon
+  float[] position = {
+    uploadFile.getPosition()[0]+uploadFile.getWidth()+buffGapWidth,
+    uploadFile.getPosition()[1]
+  };
+
+  binFileLabel = cp5.addTextarea("binName")
+    .setPosition(position[0], position[1])
+    .setText(binHexFileName)
+    .setFont(f)
+    .setLabel("Test")
+    .setSize(200, objHeights - 1)
+    .setColor(washed_text_color)
+    .setColorBackground(color(background_color))
+    .hideScrollbar()
+    ;
+}
+
+void createUploadFirmwareButton(ControlFont f) {
+  // Get position related to refresh icon
+  float[] position = {
+    binFileLabel.getPosition()[0]+binFileLabel.getWidth()+buffGapWidth*3,
+    binFileLabel.getPosition()[1]
+  };
+
+  //burn = cp5.addTextlabel("BURN")
+  //  .setPosition(position[0], position[1] + 4)
+  //  .setText("FLASH")
+  //  .setColor(color(washed_text_color))
+  //  .setFont(f)
+  //  ;
+
+  burnFirmware = cp5.addIcon("burnBinary", objHeights)
+    .setPosition(position[0], position[1])
+    .setSize(objHeights, objHeights)
+    .setFont(createFont("fontawesome-webfont.ttf", objHeights))
+    .setFontIcons(upload_ico, upload_ico)
+    .setSwitch(false)
     .hideBackground()
     ;
 }
@@ -145,71 +198,77 @@ void uploadBinary(int val) {
 }
 
 
-String getJustFileName(String filePath) {
-  IntList arrayOfSlashIndices = new IntList();
-  int idxOfSlash = 0;
-  //for mac or linux
-  if (OS() == 0 || OS() == 2) {
-    idxOfSlash =  filePath.indexOf("/");
-    while (idxOfSlash >= 0) {
-      //println(idxOfSlash);
-      if (idxOfSlash!=0) {
-        arrayOfSlashIndices.append(idxOfSlash);
-      }
-      idxOfSlash=filePath.indexOf("/", idxOfSlash + 1);
+
+
+boolean collapse;
+void keyPressed() {
+
+  if (key == 'c') {
+    collapse = !collapse;
+
+    if (collapse) {
+      surface.setResizable(true);
+      surface.setSize(630, 128);
+      surface.setResizable(false);
+
+      myTextarea.setPosition(buffGapWidth, consoleYPos + 50);
+      myTextarea.setHeight(2);
+      myTextarea.hideScrollbar();
+    } else {
+
+      surface.setResizable(true);
+      surface.setSize(630, 320);
+      surface.setResizable(false);
+
+      myTextarea.setPosition(buffGapWidth, consoleYPos);
+      myTextarea.setHeight(height-(consoleYPos+buffGapWidth));
+      myTextarea.showScrollbar();
     }
   }
 
-  //for windows
-  if (OS() == 1) {
-    idxOfSlash =  filePath.indexOf("\\");
-    while (idxOfSlash >= 0) {
-      //println(idxOfSlash);
-      if (idxOfSlash!=0) {
-        arrayOfSlashIndices.append(idxOfSlash);
-      }
-      idxOfSlash=filePath.indexOf("\\", idxOfSlash + 1);
-    }
-  }
+  if (key == 'r') {
+    
+    run_cmd = true;
 
-  //printArray(arrayOfSlashIndices);
-  int lastIdxOfSlash = arrayOfSlashIndices.get(arrayOfSlashIndices.size()-1);
-  String filename = filePath.substring(lastIdxOfSlash+1, filePath.length());
-  //println(filename);
-  return filename;
-}
+    //try {
+    //  Process pb = exec("ping", "-c", "5", "www.google.com");
+      
+    //  reader = new BufferedReader(new InputStreamReader(pb.getInputStream()));
 
-// ------------------------------------- //
-// function to strip file name form path //
-// ------------------------------------- //
-void binaryFileSelected(File selection) {
-  if (selection == null) {
-    println("\nSELECTION ABORTED");
-  } else {
-    binHexFilePath = selection.getAbsolutePath();
-    binHexFileName = getJustFileName(binHexFilePath);
-    println("\nSELECTED BINARY FILE PATH:\t" + binHexFilePath);
-    println("\nSELECTED BINARY FILE:\t" + binHexFileName);
+    //  while ((res = reader.readLine()) != null) {
+    //    println(res);
+    //  }
+    //  //int exitVal = pb.waitFor();
+    //}
+    //catch (IOException e) {
+    //  e.printStackTrace();
+    //  res = null;
+    //}
 
-    // Save the file path info in a text file, for next time loading
-    String[] strList = {binHexFilePath};
-    // Writes the strings to a file, each on a separate line
-    try {
-      String infoFilePath = "";
-      if (OS() == 0 || OS() == 2) {
-        // mac or  linux
-        infoFilePath = "data/" + binPathInfoFile;
-      }
-      if (OS() == 1) {
-        // win
-        infoFilePath = "data\\" + binPathInfoFile;
-      }
-      saveStrings(infoFilePath, strList);
-      println("INFO FILE SAVED WITH BIN PATH INFO\n");
-    }
-    catch (Exception e) {
-      println("FILE COULD NOT BE SAVED BECAUSE:\n");
-      println(e);
-    }
+    //ProcessBuilder pb = new ProcessBuilder("ping", "-c", "5", "www.google.com");
+    //pb.inheritIO();
+    //try {
+    //  Process p = pb.start();
+    //  //int exitStatus = p.waitFor();
+    //  //System.out.println(exitStatus);
+
+    //  p.waitFor();
+
+    //  InputStream inputStream = p.getInputStream();
+    //  BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+    //  String responseLine = "";
+    //  //StringBuilder output = new StringBuilder();
+    //  while (( responseLine = reader.readLine())!= null) {
+    //    //output.append(responseLine + "\n");
+    //    //d = responseLine + "\n";
+    //    System.out.println(responseLine + "\n");
+    //    //println(output + "\n");
+    //    //myTextarea.setText(output + "\n");
+    //  }
+    //}
+    //catch (InterruptedException | IOException x) {
+    //  println("test");
+    //  x.printStackTrace();
+    //}
   }
 }

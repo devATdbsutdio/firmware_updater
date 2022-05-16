@@ -1,3 +1,10 @@
+String pythonPath = "PYTHON_PATH";
+String progFilePath = "PROG.PY_PATH";
+String binHexFilePath = "BIN_PATH";
+String binHexFileName = "BIN_NAME";
+// To be used later by UI, after selecting a port, this will be inserted in upload command
+String uploadPortName = "";
+
 void sysinfo() {
   println( "__SYS INFO :");
   println( "System     : " + System.getProperty("os.name") + "  " + System.getProperty("os.version") + "  " + System.getProperty("os.arch") );
@@ -50,8 +57,98 @@ String getPythonPath(int _osn) {
   return pyPath;
 }
 
+String getPythonProgScptPath(int _osn) {
+  String pyScptPath = "";
+  if (_osn == 0) {
+    // mac OS specific python3
+    pyScptPath = sketchPath() + "/tools/prog.py";
+  } else if (_osn == 1) {
+    // windows specific python3
+    pyScptPath = sketchPath() + "\\tools\\prog.py";
+  } else if (_osn == 2) {
+    // linux specific python3
+    pyScptPath = sketchPath() + "/tools/prog.py";
+  } else {
+    // TBD:
+  }
+  return pyScptPath;
+}
 
 
+
+String getJustFileName(String filePath) {
+  IntList arrayOfSlashIndices = new IntList();
+  int idxOfSlash = 0;
+  //for mac or linux
+  if (OS() == 0 || OS() == 2) {
+    idxOfSlash =  filePath.indexOf("/");
+    while (idxOfSlash >= 0) {
+      //println(idxOfSlash);
+      if (idxOfSlash!=0) {
+        arrayOfSlashIndices.append(idxOfSlash);
+      }
+      idxOfSlash=filePath.indexOf("/", idxOfSlash + 1);
+    }
+  }
+
+  //for windows
+  if (OS() == 1) {
+    idxOfSlash =  filePath.indexOf("\\");
+    while (idxOfSlash >= 0) {
+      //println(idxOfSlash);
+      if (idxOfSlash!=0) {
+        arrayOfSlashIndices.append(idxOfSlash);
+      }
+      idxOfSlash=filePath.indexOf("\\", idxOfSlash + 1);
+    }
+  }
+
+  //printArray(arrayOfSlashIndices);
+  int lastIdxOfSlash = arrayOfSlashIndices.get(arrayOfSlashIndices.size()-1);
+  String filename = filePath.substring(lastIdxOfSlash+1, filePath.length());
+  //println(filename);
+  return filename;
+}
+
+// ------------------------------------- //
+// function to strip file name form path //
+// ------------------------------------- //
+void binaryFileSelected(File selection) {
+  if (selection == null) {
+    println("\nSELECTION ABORTED");
+  } else {
+    binHexFilePath = selection.getAbsolutePath();
+    binHexFileName = getJustFileName(binHexFilePath);
+    println("\nSELECTED BINARY FILE PATH:\t" + binHexFilePath);
+    println("\nSELECTED BINARY FILE:\t" + binHexFileName);
+
+    binFileLabel.setText(binHexFileName);
+
+    // Save the file path info in a text file, for next time loading
+    String[] strList = {binHexFilePath};
+    // Writes the strings to a file, each on a separate line
+    String infoFilePath = "";
+    if (OS() == 0 || OS() == 2) {
+      // mac or  linux
+      infoFilePath = "data/" + binPathInfoFile;
+    }
+    if (OS() == 1) {
+      // win
+      infoFilePath = "data\\" + binPathInfoFile;
+    }
+    try {
+      saveStrings(infoFilePath, strList);
+      println("INFO FILE SAVED WITH BIN PATH INFO\n");
+    }
+    catch (Exception e) {
+      println("FILE COULD NOT BE SAVED BECAUSE:\n");
+      println(e);
+    }
+  }
+}
+
+
+// On first load ...
 void loadAndSetBinaryFilePath(String filename) {
   String infoFilePath = "";
   if (OS() == 0 || OS() == 2) {
@@ -62,7 +159,7 @@ void loadAndSetBinaryFilePath(String filename) {
     // win
     infoFilePath = "data\\" + filename;
   }
-  
+
   try {
     String[] lines = loadStrings(infoFilePath);
     if (lines.length == 0) {
@@ -75,8 +172,11 @@ void loadAndSetBinaryFilePath(String filename) {
     binHexFilePath = lines[0]; // the first line is the path of the binary
     binHexFileName = getJustFileName(binHexFilePath);
     println(binHexFilePath);
+
+    binFileLabel.setText(binHexFileName);
   }
   catch (Exception e) {
     println("NO INFO FILE FOUND!\n");
+    printArray(e);
   }
 }
