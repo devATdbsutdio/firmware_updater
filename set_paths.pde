@@ -1,3 +1,6 @@
+// Location where we store the binary's previously selected path
+String binPathInfoFile = "path.txt";
+
 String pythonPath = "PYTHON_PATH";
 String progFilePath = "PROG.PY_PATH";
 String binHexFilePath = "BIN_PATH";

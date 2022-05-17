@@ -7,12 +7,13 @@ UI elements:
  5. [-][Button] Upload to HW.
  6. [TBD] - [Toggle] upload loop.
  6. [TBD] - [Button] get latest firmware.
- 
  Test on different OS
  */
 
-String UI_props_file = "props.properties";
 
+int yellow_color = #F0C674;
+int background_color = #1D1F21;
+int washed_text_color = 150;
 
 
 // font-aweosme icons: https://fontawesome.com/v5/cheatsheet
@@ -227,48 +228,6 @@ void keyPressed() {
   }
 
   if (key == 'r') {
-    
     run_cmd = true;
-
-    //try {
-    //  Process pb = exec("ping", "-c", "5", "www.google.com");
-      
-    //  reader = new BufferedReader(new InputStreamReader(pb.getInputStream()));
-
-    //  while ((res = reader.readLine()) != null) {
-    //    println(res);
-    //  }
-    //  //int exitVal = pb.waitFor();
-    //}
-    //catch (IOException e) {
-    //  e.printStackTrace();
-    //  res = null;
-    //}
-
-    //ProcessBuilder pb = new ProcessBuilder("ping", "-c", "5", "www.google.com");
-    //pb.inheritIO();
-    //try {
-    //  Process p = pb.start();
-    //  //int exitStatus = p.waitFor();
-    //  //System.out.println(exitStatus);
-
-    //  p.waitFor();
-
-    //  InputStream inputStream = p.getInputStream();
-    //  BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-    //  String responseLine = "";
-    //  //StringBuilder output = new StringBuilder();
-    //  while (( responseLine = reader.readLine())!= null) {
-    //    //output.append(responseLine + "\n");
-    //    //d = responseLine + "\n";
-    //    System.out.println(responseLine + "\n");
-    //    //println(output + "\n");
-    //    //myTextarea.setText(output + "\n");
-    //  }
-    //}
-    //catch (InterruptedException | IOException x) {
-    //  println("test");
-    //  x.printStackTrace();
-    //}
   }
 }
