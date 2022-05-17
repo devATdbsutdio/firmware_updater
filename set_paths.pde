@@ -1,4 +1,4 @@
-// Location where we store the binary's previously selected path
+// Location where we store the previously selected binary's path
 String binPathInfoFile = "path.txt";
 
 String pythonPath = "PYTHON_PATH";
@@ -6,23 +6,55 @@ String progFilePath = "PROG.PY_PATH";
 String binHexFilePath = "BIN_PATH";
 String binHexFileName = "BIN_NAME";
 // To be used later by UI, after selecting a port, this will be inserted in upload command
-String uploadPortName = "";
+String uploadPortName = "SERIAL_PORT";
+
+
+
+String[] flash_cmd = {
+  pythonPath,
+  "-u",
+  progFilePath,
+  "-t",
+  "uart",
+  "-u",
+  uploadPortName,
+  "-b",
+  "921600",
+  "-d",
+  "attiny1607",
+  "--fuses",
+  "2:0x02",
+  "6:0x00",
+  "8:0x00",
+  "-f",
+  binHexFilePath,
+  "-a",
+  "write"
+};
+
+void printFlashCommand(String[] cmd) {
+  StringBuffer cmd_buffer = new StringBuffer();
+  for (int i = 0; i < cmd.length; i++) {
+    cmd_buffer.append(cmd[i] + " ");
+  }
+  println("\nFLASHING CMD:\t" + cmd_buffer.toString() + "\n");
+}
 
 void sysinfo() {
-  println( "__SYS INFO :");
-  println( "System     : " + System.getProperty("os.name") + "  " + System.getProperty("os.version") + "  " + System.getProperty("os.arch") );
-  println( "JAVA       : " + System.getProperty("java.home")  + " rev: " +javaVersionName);
+  println( "SYS INFO :");
+  println( "System:\t" + System.getProperty("os.name") + "  " + System.getProperty("os.version") + "  " + System.getProperty("os.arch") );
+  println( "JAVA:\t" + System.getProperty("java.home")  + " rev: " +javaVersionName);
   //println( System.getProperty("java.class.path") );
   //println( "\n" + isGL() + "\n" );
-  println( "OPENGL     : VENDOR " + PGraphicsOpenGL.OPENGL_VENDOR+" RENDERER " + PGraphicsOpenGL.OPENGL_RENDERER+" VERSION " + PGraphicsOpenGL.OPENGL_VERSION+" GLSL_VERSION: " + PGraphicsOpenGL.GLSL_VERSION);
-  println( "user.home  : " + System.getProperty("user.home") );
-  println( "user.dir   : " + System.getProperty("user.dir") );
-  println( "user.name  : " + System.getProperty("user.name") );
-  println( "sketchPath : " + sketchPath() );
-  println( "dataPath   : " + dataPath("") );
-  println( "dataFile   : " + dataFile("") );
-  println( "frameRate  :  actual "+nf(frameRate, 0, 1));
-  println( "canvas     : width "+width+" height "+height+" pix "+(width*height));
+  //println( "OPENGL     : VENDOR " + PGraphicsOpenGL.OPENGL_VENDOR+" RENDERER " + PGraphicsOpenGL.OPENGL_RENDERER+" VERSION " + PGraphicsOpenGL.OPENGL_VERSION+" GLSL_VERSION: " + PGraphicsOpenGL.GLSL_VERSION);
+  //println( "user.home  : " + System.getProperty("user.home") );
+  //println( "user.dir   : " + System.getProperty("user.dir") );
+  //println( "user.name  : " + System.getProperty("user.name") );
+  //println( "sketchPath : " + sketchPath() );
+  println( "dataPath:\t" + dataPath(""));
+  println( "dataFile:\t" + dataFile(""));
+  println( "frameRate:\t"+nf(frameRate, 0, 1));
+  //println( "canvas     : width "+width+" height "+height+" pix "+(width*height));
 }
 
 int OS() {
@@ -78,7 +110,9 @@ String getPythonProgScptPath(int _osn) {
 }
 
 
-
+// ------------------------------------- //
+// function to strip file name form path //
+// ------------------------------------- //
 String getJustFileName(String filePath) {
   IntList arrayOfSlashIndices = new IntList();
   int idxOfSlash = 0;
@@ -113,9 +147,7 @@ String getJustFileName(String filePath) {
   return filename;
 }
 
-// ------------------------------------- //
-// function to strip file name form path //
-// ------------------------------------- //
+
 void binaryFileSelected(File selection) {
   if (selection == null) {
     println("\nSELECTION ABORTED");
@@ -126,6 +158,10 @@ void binaryFileSelected(File selection) {
     println("\nSELECTED BINARY FILE:\t" + binHexFileName);
 
     binFileLabel.setText(binHexFileName);
+    
+    // Update binary PATH in flash command
+    flash_cmd[16] = binHexFilePath;
+    //printFlashCommand(flash_cmd);
 
     // Save the file path info in a text file, for next time loading
     String[] strList = {binHexFilePath};
@@ -171,12 +207,16 @@ void loadAndSetBinaryFilePath(String filename) {
     if (lines[0].length() == 0) {
       return ;
     }
-    print("FOUND BIN PATH FROM INFO FILE:\n");
+    print("\nFOUND BIN PATH FROM INFO FILE:\n");
     binHexFilePath = lines[0]; // the first line is the path of the binary
     binHexFileName = getJustFileName(binHexFilePath);
     println(binHexFilePath);
 
     binFileLabel.setText(binHexFileName);
+
+    // Update binary PATH in flash command
+    flash_cmd[16] = binHexFilePath;
+    //printFlashCommand(flash_cmd);
   }
   catch (Exception e) {
     println("NO INFO FILE FOUND!\n");

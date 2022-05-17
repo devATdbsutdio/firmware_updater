@@ -39,12 +39,52 @@ String[] filterSerialList(StringList allSerialPorts) {
 }
 
 
-/*
- String pythonPath;
- String progFilePath;
- String binHexFilePath;
- String binHexFileName";
- String uploadPortName;
- 
- <pythonPATH> -u <prog.pyPATH> -t uart -u <SERIAL_PORT> -b 921600 -d attiny1607 --fuses 2:0x02 6:0x00 8:0x00 -f <BIN_PATH> -a write
- */
+
+String cmd[] = {"ping", "-c", "5", "www.bing.com"};
+void run_cmd() {
+  /*
+   Don't know why I had to instantiate console here again. But this came out of trail and error.
+   Or else if we use println(), in this threaded fucntion, then we can only call the thread once,
+   or basicaly I don't know if the thread is called again, but I do not see any text output in the
+   sketch console.
+   */
+
+  myTextarea.clear();
+  console.clear();
+  
+  printFlashCommand(flash_cmd);
+
+  // 1. Run the command
+  try {
+    //Process p = Runtime.getRuntime().exec(cmd);
+    Process p = Runtime.getRuntime().exec(flash_cmd);
+    // 2. Create a buffer reader to capture input stream. (Note: we are not capturing error stream
+    // but it can be done)
+    BufferedReader buff = new BufferedReader(new InputStreamReader(p.getInputStream()));
+    String stdIn = null;
+    // 3. Read a line and if it's not null, print it.
+    while ((stdIn = buff.readLine()) != null) {
+      println(stdIn.toString());
+      //newOutputLine = stdIn.toString();
+    }
+    
+    // 4. Check the exit code to be 100% sure, the command ran successfully (exitCode 0)
+    int exitVal = p.waitFor();
+    println("EXIT CODE:\t", str(exitVal));
+    //newOutputLine = "EXIT CODE:\t" + str(exitVal);
+    buff.close();
+
+    if (exitVal == 0) {
+      println("\n --- SUCCESFULLY FLASHED FIRMWARE: " + binHexFileName + "  --- \n\n");
+    }else {
+      println("\n --- ERROR WHILE FLASHING FIRMWARE: " + binHexFileName + " --- \n\n");
+    }
+  }
+  catch (Exception e) {
+    println("\n\nSome exception happened!\n");
+    //newOutputLine = "some exception happened!";
+    //e.printStackTrace();
+  }
+
+  console = cp5.addConsole(myTextarea);
+}

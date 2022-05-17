@@ -1,1 +1,1 @@
-/Users/saurabhdatta/PersonalProjects/clock/serialUPDI/megaTinyCore/megaavr/tools/binaries/components_check.hex
+/Users/saurabhdatta/PersonalProjects/clock/serialUPDI/megaTinyCore/megaavr/tools/binaries/watch_firmware.hex

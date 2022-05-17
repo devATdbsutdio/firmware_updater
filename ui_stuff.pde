@@ -43,7 +43,7 @@ Textlabel burn;
 
 int buffGapWidth = 10;
 int objHeights = 25;
-int consoleYPos = 100;
+int consoleYPos = 128;
 
 
 
@@ -113,7 +113,7 @@ void createUploadFileButton() {
     serialListMenu.getPosition()[1]
   };
 
-  uploadFile = cp5.addIcon("uploadBinary", objHeights-2)
+  uploadFile = cp5.addIcon("selectBinary", objHeights-2)
     .setPosition(position[0], position[1])
     .setSize(objHeights-2, objHeights-2)
     //.setRoundedCorners(2)
@@ -191,11 +191,36 @@ void serialPort(int n) {
   uploadPortName = serialListMenu.getItem(n).get("text").toString();
   println("\nSELECTED PORT:\t", uploadPortName);
   //serialListMenu.setLabel(uploadPortName).close();
+
+  flash_cmd[6] = uploadPortName; // Update prog.py's PATH in flash command
+  //printFlashCommand(flash_cmd);
 }
 
-void uploadBinary(int val) {
-  println("\nUPLOAD FILE  .");
+void selectBinary(int val) {
+  //println("\nUPLOAD FILE  .");
   selectInput("\nSELECT BINARY HEX FILE TO UPLAOD:", "binaryFileSelected");
+}
+
+void burnBinary(int n) {
+  if (pythonPath == null || pythonPath.equals("") || pythonPath.equals("PYTHON_PATH")) {
+    println("\nWARNING:\t Python path was not set / could not be found!");
+    return ;
+  }
+  if (progFilePath == null || progFilePath.equals("") || progFilePath.equals("PROG.PY_PATH")) {
+    println("\nWARNING:\t Programmer py script's path was not set / could not be found!");
+    return ;
+  }
+  if (binHexFilePath == null || binHexFilePath.equals("") || binHexFilePath.equals("BIN_PATH")) {
+    println("\nWARNING:\t Binary hex file's path was not set / could not be found!");
+    return ;
+  }
+  if (uploadPortName == null || uploadPortName.equals("") || uploadPortName.equals("SERIAL_PORT")) {
+    println("\nWARNING:\t Serial port was not selected!");
+    return ;
+  }
+  
+  //printFlashCommand(flash_cmd);
+  thread("run_cmd"); // it's the function that uses the flash_cmd 
 }
 
 
@@ -204,7 +229,7 @@ void uploadBinary(int val) {
 boolean collapse;
 void keyPressed() {
 
-  if (key == 'c') {
+  if (key == 'h') {
     collapse = !collapse;
 
     if (collapse) {
@@ -227,7 +252,7 @@ void keyPressed() {
     }
   }
 
-  if (key == 'r') {
-    run_cmd = true;
+  if (key == 'f' || key == 'F') {
+    burnBinary(1);
   }
 }
