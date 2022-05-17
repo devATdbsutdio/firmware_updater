@@ -99,7 +99,8 @@ void createSerialPortsMenu(ControlFont f) {
     .setColorLabel(washed_text_color)
     .setItemHeight(objHeights)
     .addItems(workablePortsArray)
-    .setType(ScrollableList.DROPDOWN) // currently supported DROPDOWN and LIST
+    //.setType(ScrollableList.DROPDOWN) // currently supported DROPDOWN and LIST
+    .setType(ScrollableList.LIST)
     .close()
     ;
 }
@@ -114,11 +115,9 @@ void createUploadFileButton() {
   uploadFile = cp5.addIcon("selectBinary", objHeights-2)
     .setPosition(position[0], position[1])
     .setSize(objHeights-2, objHeights-2)
-    //.setRoundedCorners(2)
     .setFont(createFont("fontawesome-webfont.ttf", objHeights-2))
     .setFontIcons(file_ico, file_ico)
     .setSwitch(false)
-    //.setColorBackground(color(255, 100))
     .hideBackground()
     ;
 }
@@ -148,13 +147,6 @@ void createUploadFirmwareButton(ControlFont f) {
     binFileLabel.getPosition()[0]+binFileLabel.getWidth()+buffGapWidth*3,
     binFileLabel.getPosition()[1]
   };
-
-  //burn = cp5.addTextlabel("BURN")
-  //  .setPosition(position[0], position[1] + 4)
-  //  .setText("FLASH")
-  //  .setColor(color(washed_text_color))
-  //  .setFont(f)
-  //  ;
 
   burnFirmware = cp5.addIcon("burnBinary", objHeights)
     .setPosition(position[0], position[1])
@@ -187,8 +179,16 @@ void refreshPorts(int val) {
 
 void serialPort(int n) {
   uploadPortName = serialListMenu.getItem(n).get("text").toString();
-  println("\nSELECTED PORT:\t", uploadPortName);
+  //println("\nSELECTED PORT:\t", uploadPortName);
   //serialListMenu.setLabel(uploadPortName).close();
+
+  serialListMenu.setLabel(uploadPortName);
+  if (serialListMenu.isMouseOver()) {
+    serialListMenu.close();
+    println("\nSELECTED PORT:\t", uploadPortName);
+    //serialListMenu.close();
+  }
+
 
   flash_cmd[6] = uploadPortName; // Update prog.py's PATH in flash command
   //printFlashCommand(flash_cmd);
@@ -246,10 +246,12 @@ void unlockUIElements() {
 
 boolean collapse;
 int UIElementNumber = 0;
-void keyPressed() {
+int serialMenuItemId = 0;
 
+void keyPressed() {
   if (key == 'r' || key == 'R') {
-    refreshPorts(1);;
+    refreshPorts(1);
+    ;
   }
   if (key == 'f' || key == 'F') {
     burnBinary(1);
@@ -264,12 +266,14 @@ void keyPressed() {
       burnFirmware.setColorForeground(color(yellow_color));
       break;
     case 1:
+      //serialListMenu.setMouseOver(false);
       serialListMenu.open();
       refresh.setColorForeground(color(yellow_color));
       uploadFile.setColorForeground(color(yellow_color));
       burnFirmware.setColorForeground(color(yellow_color));
       break;
     case 2:
+      //serialListMenu.setMouseOver(true);
       serialListMenu.close();
       refresh.setColorForeground(color(yellow_color));
       uploadFile.setColorForeground(color(highlight_color));
@@ -294,13 +298,42 @@ void keyPressed() {
       refreshPorts(1);
       break;
     case 1:
+      if (serialListMenu.isOpen()) {
+        serialListMenu.close();
+        println("\nSELECTED PORT:\t", uploadPortName);
+      } else {
+        serialListMenu.open();
+      }
       break;
     case 2:
       selectBinary(1);
       break;
-    case 3:
+    case -1:
       burnBinary(1);
       break;
+    }
+  }
+
+  if (key == CODED) {
+    if (serialListMenu.isOpen() == false) {
+      return;
+    }
+    serialListMenu.setValue(serialMenuItemId).update();
+    if (keyCode == UP) {
+      //println("go up serial list");
+      // TBD
+      serialMenuItemId--;
+      if (serialMenuItemId < 0) {
+        serialMenuItemId = serialListMenu.getItems().size()-1;
+      }
+    }
+    if (keyCode == DOWN) {
+      //println("go down serial list");
+      // TBD
+      serialMenuItemId++;
+      if (serialMenuItemId > serialListMenu.getItems().size()-1) {
+        serialMenuItemId = 0;
+      }
     }
   }
 
@@ -327,4 +360,11 @@ void keyPressed() {
       myTextarea.showScrollbar();
     }
   }
+}
+
+void mousePressed() {
+  //UIElementNumber = 0;
+  refresh.setColorForeground(color(yellow_color));
+  uploadFile.setColorForeground(color(yellow_color));
+  burnFirmware.setColorForeground(color(yellow_color));
 }
