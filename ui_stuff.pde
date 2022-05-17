@@ -14,7 +14,8 @@ UI elements:
 int yellow_color = #F0C674;
 int background_color = #1D1F21;
 int washed_text_color = 150;
-
+int locked_color = #B46758;
+int highlight_color = #8EB559;
 
 // font-aweosme icons: https://fontawesome.com/v5/cheatsheet
 int refresh_ico = #00f021;
@@ -24,6 +25,7 @@ int file_ico = #00f15b;
 int upload_ico = #00f061;
 int toggle_on_ico = #00f205;
 int toggle_off_ico = #00f204;
+
 
 import controlP5.*;
 ControlP5 cp5;
@@ -35,8 +37,6 @@ Icon refresh;
 ScrollableList serialListMenu;
 Icon uploadFile;
 Textarea binFileLabel;
-
-Button b;
 Icon burnFirmware;
 Textlabel burn;
 
@@ -65,11 +65,9 @@ void createRefreshSerialPortsButton() {
   refresh = cp5.addIcon("refreshPorts", objHeights)
     .setPosition(buffGapWidth, 25)
     .setSize(objHeights, objHeights)
-    //.setRoundedCorners(2)
     .setFont(createFont("fontawesome-webfont.ttf", objHeights))
     .setFontIcons(refresh_ico, refresh_ico)
     .setSwitch(false)
-    //.setColorBackground(color(255, 100))
     .hideBackground()
     ;
 }
@@ -218,18 +216,96 @@ void burnBinary(int n) {
     println("\nWARNING:\t Serial port was not selected!");
     return ;
   }
-  
+
   //printFlashCommand(flash_cmd);
-  thread("run_cmd"); // it's the function that uses the flash_cmd 
+  thread("run_cmd"); // it's the function that uses the flash_cmd
+}
+
+void lockUIElements() {
+  refresh.lock();
+  uploadFile.lock();
+  burnFirmware.lock();
+
+  refresh.setColorForeground(color(locked_color));
+  uploadFile.setColorForeground(color(locked_color));
+  burnFirmware.setColorForeground(color(locked_color));
+}
+
+void unlockUIElements() {
+  refresh.unlock();
+  uploadFile.unlock();
+  burnFirmware.unlock();
+
+  refresh.setColorForeground(color(yellow_color));
+  uploadFile.setColorForeground(color(yellow_color));
+  burnFirmware.setColorForeground(color(yellow_color));
 }
 
 
 
 
 boolean collapse;
+int UIElementNumber = 0;
 void keyPressed() {
 
-  if (key == 'h') {
+  if (key == 'r' || key == 'R') {
+    refreshPorts(1);;
+  }
+  if (key == 'f' || key == 'F') {
+    burnBinary(1);
+  }
+
+
+  if (key == TAB) {
+    switch (UIElementNumber) {
+    case 0:
+      refresh.setColorForeground(color(highlight_color));
+      uploadFile.setColorForeground(color(yellow_color));
+      burnFirmware.setColorForeground(color(yellow_color));
+      break;
+    case 1:
+      serialListMenu.open();
+      refresh.setColorForeground(color(yellow_color));
+      uploadFile.setColorForeground(color(yellow_color));
+      burnFirmware.setColorForeground(color(yellow_color));
+      break;
+    case 2:
+      serialListMenu.close();
+      refresh.setColorForeground(color(yellow_color));
+      uploadFile.setColorForeground(color(highlight_color));
+      burnFirmware.setColorForeground(color(yellow_color));
+      break;
+    case 3:
+      refresh.setColorForeground(color(yellow_color));
+      uploadFile.setColorForeground(color(yellow_color));
+      burnFirmware.setColorForeground(color(highlight_color));
+      break;
+    }
+
+    UIElementNumber++;
+    if (UIElementNumber > 3) {
+      UIElementNumber = 0;
+    }
+  }
+
+  if (key == ENTER || key == RETURN) {
+    switch (UIElementNumber-1) {
+    case 0:
+      refreshPorts(1);
+      break;
+    case 1:
+      break;
+    case 2:
+      selectBinary(1);
+      break;
+    case 3:
+      burnBinary(1);
+      break;
+    }
+  }
+
+
+  if (key == 'h' || key == 'H') {
     collapse = !collapse;
 
     if (collapse) {
@@ -250,9 +326,5 @@ void keyPressed() {
       myTextarea.setHeight(height-(consoleYPos+buffGapWidth));
       myTextarea.showScrollbar();
     }
-  }
-
-  if (key == 'f' || key == 'F') {
-    burnBinary(1);
   }
 }

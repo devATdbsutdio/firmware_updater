@@ -40,18 +40,14 @@ String[] filterSerialList(StringList allSerialPorts) {
 
 
 
-String cmd[] = {"ping", "-c", "5", "www.bing.com"};
-void run_cmd() {
-  /*
-   Don't know why I had to instantiate console here again. But this came out of trail and error.
-   Or else if we use println(), in this threaded fucntion, then we can only call the thread once,
-   or basicaly I don't know if the thread is called again, but I do not see any text output in the
-   sketch console.
-   */
 
+void run_cmd() {
+  // While the command is running lock the UI
+  lockUIElements();
+  
   myTextarea.clear();
   console.clear();
-  
+
   printFlashCommand(flash_cmd);
 
   // 1. Run the command
@@ -67,7 +63,7 @@ void run_cmd() {
       println(stdIn.toString());
       //newOutputLine = stdIn.toString();
     }
-    
+
     // 4. Check the exit code to be 100% sure, the command ran successfully (exitCode 0)
     int exitVal = p.waitFor();
     println("EXIT CODE:\t", str(exitVal));
@@ -76,7 +72,7 @@ void run_cmd() {
 
     if (exitVal == 0) {
       println("\n --- SUCCESFULLY FLASHED FIRMWARE: " + binHexFileName + "  --- \n\n");
-    }else {
+    } else {
       println("\n --- ERROR WHILE FLASHING FIRMWARE: " + binHexFileName + " --- \n\n");
     }
   }
@@ -86,5 +82,14 @@ void run_cmd() {
     //e.printStackTrace();
   }
 
+  /*
+   Don't know why I had to instantiate console here again. But this came out of trail and error.
+   Or else if we use println(), in this threaded fucntion, then we can only call the thread once,
+   or basicaly I don't know if the thread is called again, but I do not see any text output in the
+   sketch console.
+   */
   console = cp5.addConsole(myTextarea);
+
+  // After the command has ran, Release the UI
+  unlockUIElements();
 }
