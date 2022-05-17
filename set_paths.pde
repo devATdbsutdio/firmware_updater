@@ -51,8 +51,8 @@ void sysinfo() {
   //println( "user.dir   : " + System.getProperty("user.dir") );
   //println( "user.name  : " + System.getProperty("user.name") );
   //println( "sketchPath : " + sketchPath() );
-  println( "dataPath:\t" + dataPath(""));
-  println( "dataFile:\t" + dataFile(""));
+  //println( "dataPath:\t" + dataPath(""));
+  //println( "dataFile:\t" + dataFile(""));
   println( "frameRate:\t"+nf(frameRate, 0, 1));
   //println( "canvas     : width "+width+" height "+height+" pix "+(width*height));
 }
