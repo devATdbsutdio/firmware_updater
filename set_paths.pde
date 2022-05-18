@@ -59,22 +59,27 @@ void sysinfo() {
 
 int OS() {
   int osn = 0;
+  
+  String fullOSName = System.getProperty("os.name");
+  String shortOSName = fullOSName.substring(0, 3).toLowerCase();
+  //println(shortOSName);
+  
 
-  if (System.getProperty("os.name").equals("Mac OS X")) {
+  if (shortOSName.equals("mac")) {
     // TBD accomodate other mac OS name types
     osn = 0;
-  } else if (System.getProperty("os.name").equals("Windows")) {
+  } else if (shortOSName.equals("win")) {
     // TBD accomodate other indows name types
     osn = 1;
-  } else if (System.getProperty("os.name").equals("Windows")) {
+  } else if (shortOSName.equals("lin")) {
     osn = 2;
   } else {
     osn = 3;
   }
-  
+
   // TEST
-  osn = 1;
-  
+  // osn = 1;
+
   return osn;
 }
 
@@ -164,7 +169,7 @@ void binaryFileSelected(File selection) {
     println("\nSELECTED BINARY FILE:\t" + binHexFileName);
 
     binFileLabel.setText(binHexFileName);
-    
+
     // Update binary PATH in flash command
     flash_cmd[16] = binHexFilePath;
     //printFlashCommand(flash_cmd);
@@ -204,9 +209,18 @@ void loadAndSetBinaryFilePath(String filename) {
     // win
     infoFilePath = "data\\" + filename;
   }
-
+  
+  // Chcek if file exists in path;
+  File f = dataFile(getJustFileName(infoFilePath));
+  String filePath = f.getPath();
+  boolean exist = f.isFile();
+  if (!exist) {
+    return ;
+  }  
+  
+  // if so, laod the strings from it. 
   try {
-    String[] lines = loadStrings(infoFilePath);
+    String[] lines = loadStrings(filePath);
     if (lines.length == 0) {
       return ;
     }

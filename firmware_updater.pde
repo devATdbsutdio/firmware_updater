@@ -33,7 +33,7 @@ void setup() {
   // OS() = 0 -> means mac
   // OS() = 1 -> means win
   // OS() = 3 -> means *nix
-  // println("\n", str(OS()));
+   //println("\n", str(OS()));
   sysinfo();
 
   // ----------------------------------------------------------------------------- //
