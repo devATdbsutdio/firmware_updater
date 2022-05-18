@@ -2,6 +2,8 @@ import java.io.InputStreamReader;
 import processing.serial.*;
 Serial uploadPort;
 
+boolean enableFlashing = false;
+
 String[] filterSerialList(StringList allSerialPorts) {
   StringList filteredPorts = new StringList();
 
@@ -40,6 +42,43 @@ String[] filterSerialList(StringList allSerialPorts) {
 
 
 void run_cmd() {
+  if (!enableFlashing) {
+    println("\n[WARNING]");
+    println("The attempted file selection didn't work because of invalid filename");
+    println("And you tried to flash!");
+    println("So we are stopping this attempt to flash firmware file");
+    /*
+     Don't know why I had to instantiate console here again. But this came out of trail and error.
+     Or else if we use println(), in this threaded fucntion, then we can only call the thread once,
+     or basicaly I don't know if the thread is called again, but I do not see any text output in the
+     sketch console.
+     */
+    console = cp5.addConsole(myTextarea);
+    return ;
+  }
+
+  // Also Check if flashing firmware truely exists
+  File f = new File(flash_cmd[16]);
+  if (!f.exists()) {
+    println("\n[WARNING]");
+    println("Previously used file", flash_cmd[16], "doesn't exist!");
+    println("And you tried to flash!");
+    println("So we are stopping this attempt to flash firmware file");
+    println("\nReload the firmware file to flash");
+    /*
+     Don't know why I had to instantiate console here again. But this came out of trail and error.
+     Or else if we use println(), in this threaded fucntion, then we can only call the thread once,
+     or basicaly I don't know if the thread is called again, but I do not see any text output in the
+     sketch console.
+     */
+    console = cp5.addConsole(myTextarea);
+    return ;
+  }
+
+  println("\nPreviously used file exists!");
+  println();
+
+
   // While the command is running lock the UI
   lockUIElements();
 

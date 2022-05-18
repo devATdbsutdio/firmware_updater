@@ -20,7 +20,7 @@ void setup() {
   ControlFont fontR11 = new ControlFont(loadFont("ABCDiatype-Regular-30.vlw"), 11); // use true/false for smooth/no-smooth
   ControlFont fontR14 = new ControlFont(loadFont("ABCDiatype-Light-14.vlw"), 14); // use true/false for smooth/no-smooth
 
-  setupOnScreenConsosle(fontR11);
+  setupOnScreenConsosle(fontR14);
 
 
   sysinfo();

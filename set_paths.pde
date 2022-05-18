@@ -4,11 +4,11 @@ String binPathInfoFile = "path.txt";
 String pythonPath = "PYTHON_PATH";
 String progFilePath = "PROG.PY_PATH";
 String binHexFilePath = "BIN_PATH";
-String binHexFileName = "BIN_NAME";
+String binHexFileName = "binary file [xxx.hex]";
 // To be used later by UI, after selecting a port, this will be inserted in upload command
 String uploadPortName = "SERIAL_PORT";
 
-
+char[] splChars = {' ', '*', '\\', '/'}; // special characters in file anmes to look out for
 
 String[] flash_cmd = {
   pythonPath,
@@ -39,6 +39,34 @@ void printFlashCommand(String[] cmd) {
   }
   println("\nFLASHING CMD:\t" + cmd_buffer.toString());
 }
+
+
+
+// An utility fucntion to check if strings have spaces or "*" in them or not
+// Will be used to notify users to not have spaces in the binary file names.
+boolean fileNameOk(String fp) {
+  boolean ok = false;
+
+  ArrayList<Boolean> containsSplChar = new ArrayList<Boolean>();
+  for (int i=0; i<splChars.length; i++) {
+    containsSplChar.add(false);
+  }
+  for (int i=0; i<splChars.length; i++) {
+    String[] p1 = split(fp, splChars[i]);
+    if (p1.length > 1) {
+      containsSplChar.set(i, true);
+    }
+  }
+  if (containsSplChar.contains(true)) {
+    ok = false;
+  } else {
+    ok = true;
+  }
+
+  return ok;
+}
+
+
 
 void sysinfo() {
   println( "SYS INFO :");
@@ -108,7 +136,7 @@ String getPythonProgScptPath(int _osn) {
     pyScptPath = sketchPath() + "\\tools\\prog.py";
     break;
   }
-  
+
   return pyScptPath;
 }
 
@@ -155,13 +183,23 @@ void binaryFileSelected(File selection) {
   } else {
     binHexFilePath = selection.getAbsolutePath();
     binHexFileName = getJustFileName(binHexFilePath);
-    println("\nSELECTED BINARY FILE PATH:\t" + binHexFilePath);
-    println("\nSELECTED BINARY FILE:\t" + binHexFileName);
 
-    binFileLabel.setText(binHexFileName);
+    // TBD Mitigate some in file names and re-format the Path
+    //binHexFilePath = accountForSpaces(binHexFilePath);
+    fileNameOk(binHexFileName);
 
-    // Update binary PATH in flash command
-    flash_cmd[16] = binHexFilePath;
+    if (fileNameOk(binHexFileName) == false) {
+      enableFlashing = false;
+      println("\n[WARNING]");
+      println("INVALID FILE NAME/TYPE");
+      println("The File has either SPACE/S or one of these characters (/ \\ *) in it.");
+      println("Please RENAME the file without these characters");
+      println("NOTE: Although you can use \"_\" in the file name");
+
+      enableFlashing = false;
+      //selection = null;
+      return ;
+    }
 
     // Save the file path info in a text file, for next time loading
     try {
@@ -175,6 +213,16 @@ void binaryFileSelected(File selection) {
       println("ERROR: [X] FILE COULD NOT BE SAVED!");
       return ;
     }
+
+    println("\nSELECTED BINARY FILE PATH:\t" + binHexFilePath);
+    println("\nSELECTED BINARY FILE:\t" + binHexFileName);
+
+    binFileLabel.setText(binHexFileName);
+
+    // Update binary PATH in flash command
+    flash_cmd[16] = binHexFilePath;
+
+    enableFlashing = true;
   }
 }
 
@@ -192,11 +240,40 @@ void loadAndSetBinaryFilePath(String filename) {
     print("\nFOUND BIN PATH FROM INFO FILE:");
     binHexFilePath = line; // the first line is the path of the binary
     binHexFileName = getJustFileName(binHexFilePath);
+
+    // TBD mitigate some spl chars in file names and re-format the Path
+    // binHexFilePath = accountForSpaces(binHexFilePath);
+    if (fileNameOk(binHexFileName) == false) {
+      enableFlashing = false;
+      println("\n[WARNING] INVALID FILE NAME/TYPE"); 
+      println("Tempered the name in the log (where we logged the last used file's location)");
+      println("Now it has either SPACE/S or these characters (/ \\ *) in it.");
+      println("Please RENAME the file name there (in the log file) and remove these characters.");
+      println("NOTE: You can use \"_\" in the file name");
+
+      enableFlashing = false;
+      return ;
+    }
+
+    // Also check if the file truely exists or not?
+    File f = new File(binHexFilePath);
+    if (!f.exists()) {
+      println("\n[WARNING]"); 
+      println("Previously used file", binHexFileName,"doesn't exist in the path we recorded!");
+      println("Or may be it was renamed.");
+      println("Reload the firmware file to flash");
+      enableFlashing = false;
+      return ;
+    }
+    
+    println("\nPreviously used file exists!");
     println(binHexFilePath);
     binFileLabel.setText(binHexFileName);
 
     // Update binary PATH in flash command
     flash_cmd[16] = binHexFilePath;
+
+    enableFlashing = true;
   }
   catch (Exception e) {
     return ;
