@@ -75,9 +75,6 @@ int OS() {
     osn = 3;
   }
 
-  // TEST
-   //osn = 1;
-
   return osn;
 }
 
@@ -211,7 +208,6 @@ void loadAndSetBinaryFilePath(String filename) {
   // Chcek if file exists in path;
   File f = dataFile(getJustFileName(infoFilePath));
   String filePath = f.getPath();
-  println("info file path:", filePath);
   boolean exist = f.isFile();
   if (!exist) {
     return ;
