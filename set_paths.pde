@@ -170,25 +170,15 @@ void binaryFileSelected(File selection) {
     //printFlashCommand(flash_cmd);
 
     // Save the file path info in a text file, for next time loading
-    String[] strList = {binHexFilePath};
-    // Writes the strings to a file, each on a separate line
-    //String infoFilePath = "";
-    //if (OS() == 0 || OS() == 2) {
-    //  // mac or  linux
-    //  infoFilePath = "data/" + binPathInfoFile;
-    //}
-    //if (OS() == 1) {
-    //  // win
-    //  infoFilePath = "data\\" + binPathInfoFile;
-    //}
     try {
-      //saveStrings(infoFilePath, strList);
-      saveStrings(binPathInfoFile, strList);
+      PrintWriter output = createWriter(binPathInfoFile); // create a new file
+      output.println(binHexFilePath);
+      output.flush(); // Writes the remaining data to the file
+      output.close();
       println("INFO FILE SAVED WITH BIN PATH INFO\n");
     }
     catch (Exception e) {
-      println("FILE COULD NOT BE SAVED BECAUSE:\n");
-      println(e);
+      println("ERROR: [X] FILE COULD NOT BE SAVED!\n");
       return ;
     }
   }
@@ -197,38 +187,10 @@ void binaryFileSelected(File selection) {
 
 // On first load ...
 void loadAndSetBinaryFilePath(String filename) {
-  //String infoFilePath = "";
-
-  //if (OS() == 0 || OS() == 2) {
-  //  // mac or  linux
-  //  infoFilePath = "data/" + filename;
-  //}
-  //if (OS() == 1) {
-  //  // win
-  //  infoFilePath = "data\\" + filename;
-  //}
-
-  // Chcek if file exists in path;
-  //File f = dataFile(getJustFileName(infoFilePath));
-  //String filePath = f.getPath();
-  //boolean exist = f.isFile();
-  //if (!exist) {
-  //  return ;
-  //}
-
-  // if so, laod the strings from it.
-  
-  
   try {
     BufferedReader reader = createReader(filename);
     String line = "";
-    ////String[] lines = loadStrings(filePath);
-    //if (lines.length == 0) {
-    //  return ;
-    //}
-    //if (lines[0].length() == 0) {
-    //  return ;
-    //}
+
     line = reader.readLine();
     if (line == null) {
       return ;
