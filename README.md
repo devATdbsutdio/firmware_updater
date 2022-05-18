@@ -11,7 +11,7 @@
 3. __Linux users__: You guys know what you are doing 🤓. Python3 should be there or else what are you doing in Linux.   
 
 ### Install update Drivers on your system:
-1. __MacOS users__: MacOS should also come with the serial drivers for the chip we are using, but no harm in upgrading. Install from [here](). 
+1. __MacOS users__: MacOS should also come with the serial drivers for the chip we are using, but no harm in upgrading. Install from [here](https://github.com/devATdbsutdio/firmware_updater/blob/main/tools/drivers/CH34XSER_MAC.zip). 
 2. __Windows users__: Windows should also come with the serial drivers for the chip we are using, but no harm in upgrading. Install from [here]().
 3. __Linux users__: Follow this guide [here](https://gist.github.com/dattasaurabh82/082d13fd61c0d06c7a358c5e605ce4fd). 
 
