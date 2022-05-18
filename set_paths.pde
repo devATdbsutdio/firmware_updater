@@ -59,10 +59,10 @@ void sysinfo() {
 
 int OS() {
   int osn = 0;
-  
+
   String fullOSName = System.getProperty("os.name");
   String shortOSName = fullOSName.substring(0, 3).toLowerCase();
-  
+
   if (shortOSName.equals("mac")) {
     // TBD accomodate other mac OS name types
     osn = 0;
@@ -76,7 +76,7 @@ int OS() {
   }
 
   // TEST
-  // osn = 1;
+   //osn = 1;
 
   return osn;
 }
@@ -207,16 +207,17 @@ void loadAndSetBinaryFilePath(String filename) {
     // win
     infoFilePath = "data\\" + filename;
   }
-  
+
   // Chcek if file exists in path;
   File f = dataFile(getJustFileName(infoFilePath));
   String filePath = f.getPath();
+  println("info file path:", filePath);
   boolean exist = f.isFile();
   if (!exist) {
     return ;
-  }  
-  
-  // if so, laod the strings from it. 
+  }
+
+  // if so, laod the strings from it.
   try {
     String[] lines = loadStrings(filePath);
     if (lines.length == 0) {
