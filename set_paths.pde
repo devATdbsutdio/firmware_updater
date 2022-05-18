@@ -82,8 +82,9 @@ String getPythonPath(int _osn) {
   String pyPath = "";
   if (_osn == 0) {
     // mac OS specific python3
-    //pyPath = sketchPath() + "/tools/python3/macos/python3";
-    pyPath = "python3";
+    // TBD: fix bundled python3 issues. 
+    pyPath = sketchPath() + "/tools/python3/macos/python3/python3";
+    //pyPath = "python3";
   } else if (_osn == 1) {
     // windows specific python3
     pyPath = sketchPath() + "\\tools\\python3\\windows\\python3.exe";
