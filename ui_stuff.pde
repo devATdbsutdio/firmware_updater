@@ -141,7 +141,7 @@ void createBinFileNameDisplay(ControlFont f) {
     ;
 }
 
-void createUploadFirmwareButton(ControlFont f) {
+void createUploadFirmwareButton() {
   // Get position related to refresh icon
   float[] position = {
     binFileLabel.getPosition()[0]+binFileLabel.getWidth()+buffGapWidth*3,
@@ -161,8 +161,8 @@ void createUploadFirmwareButton(ControlFont f) {
 
 
 
-void refreshPorts(int val) {
-  println("\nREFRESHING SERIAL PORTS...\n");
+void refreshPorts() {
+  println("\nREFRESHING SERIAL PORTS...");
   // Create an StringList of all the Serial ports available
   StringList serialPortsList = new StringList();
   for (int i=0; i<Serial.list().length; i++ ) {
@@ -250,7 +250,7 @@ int serialMenuItemId = 0;
 
 void keyPressed() {
   if (key == 'r' || key == 'R') {
-    refreshPorts(1);
+    refreshPorts();
     ;
   }
   if (key == 'f' || key == 'F') {
@@ -295,7 +295,7 @@ void keyPressed() {
   if (key == ENTER || key == RETURN) {
     switch (UIElementNumber-1) {
     case 0:
-      refreshPorts(1);
+      refreshPorts();
       break;
     case 1:
       if (serialListMenu.isOpen()) {

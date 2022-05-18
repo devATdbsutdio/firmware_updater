@@ -71,13 +71,13 @@ void run_cmd() {
   //  buff.close();
 
   //  if (exitVal == 0) {
-  //    println("\n --- SUCCESFULLY FLASHED FIRMWARE: " + binHexFileName + "  --- \n\n");
+  //    println("\n --- SUCCESFULLY FLASHED FIRMWARE: " + binHexFileName + "  ---");
   //  } else {
-  //    println("\n --- ERROR WHILE FLASHING FIRMWARE: " + binHexFileName + " --- \n\n");
+  //    println("\n --- ERROR WHILE FLASHING FIRMWARE: " + binHexFileName + " ---");
   //  }
   //}
   //catch (Exception e) {
-  //  println("\n\nSome exception happened!\n");
+  //  println("\nSome exception happened!");
   //  //newOutputLine = "some exception happened!";
   //  //e.printStackTrace();
   //}

@@ -37,7 +37,7 @@ void printFlashCommand(String[] cmd) {
   for (int i = 0; i < cmd.length; i++) {
     cmd_buffer.append(cmd[i] + " ");
   }
-  println("\nFLASHING CMD:\t" + cmd_buffer.toString() + "\n");
+  println("\nFLASHING CMD:\t" + cmd_buffer.toString());
 }
 
 void sysinfo() {
@@ -45,7 +45,7 @@ void sysinfo() {
   println( "System:\t" + System.getProperty("os.name") + "  " + System.getProperty("os.version") + "  " + System.getProperty("os.arch") );
   println( "JAVA:\t" + System.getProperty("java.home")  + " rev: " +javaVersionName);
   //println( System.getProperty("java.class.path") );
-  //println( "\n" + isGL() + "\n" );
+  //println( "\n" + isGL());
   //println( "OPENGL     : VENDOR " + PGraphicsOpenGL.OPENGL_VENDOR+" RENDERER " + PGraphicsOpenGL.OPENGL_RENDERER+" VERSION " + PGraphicsOpenGL.OPENGL_VERSION+" GLSL_VERSION: " + PGraphicsOpenGL.GLSL_VERSION);
   //println( "user.home  : " + System.getProperty("user.home") );
   //println( "user.dir   : " + System.getProperty("user.dir") );
@@ -175,10 +175,10 @@ void binaryFileSelected(File selection) {
       output.println(binHexFilePath);
       output.flush(); // Writes the remaining data to the file
       output.close();
-      println("INFO FILE SAVED WITH BIN PATH INFO\n");
+      println("INFO FILE SAVED WITH BIN PATH INFO");
     }
     catch (Exception e) {
-      println("ERROR: [X] FILE COULD NOT BE SAVED!\n");
+      println("ERROR: [X] FILE COULD NOT BE SAVED!");
       return ;
     }
   }
@@ -195,7 +195,7 @@ void loadAndSetBinaryFilePath(String filename) {
     if (line == null) {
       return ;
     }
-    print("\nFOUND BIN PATH FROM INFO FILE:\n");
+    print("\nFOUND BIN PATH FROM INFO FILE:");
     //binHexFilePath = lines[0]; // the first line is the path of the binary
     binHexFilePath = line; // the first line is the path of the binary
     binHexFileName = getJustFileName(binHexFilePath);

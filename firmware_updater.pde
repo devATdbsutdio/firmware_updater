@@ -57,7 +57,7 @@ void setup() {
   // ------------------------------------------------------------------------//
   loadAndSetBinaryFilePath(binPathInfoFile);
 
-  createUploadFirmwareButton(fontR14);
+  createUploadFirmwareButton();
 }
 
 
