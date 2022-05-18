@@ -44,17 +44,7 @@ void sysinfo() {
   println( "SYS INFO :");
   println( "System:\t" + System.getProperty("os.name") + "  " + System.getProperty("os.version") + "  " + System.getProperty("os.arch") );
   println( "JAVA:\t" + System.getProperty("java.home")  + " rev: " +javaVersionName);
-  //println( System.getProperty("java.class.path") );
-  //println( "\n" + isGL());
-  //println( "OPENGL     : VENDOR " + PGraphicsOpenGL.OPENGL_VENDOR+" RENDERER " + PGraphicsOpenGL.OPENGL_RENDERER+" VERSION " + PGraphicsOpenGL.OPENGL_VERSION+" GLSL_VERSION: " + PGraphicsOpenGL.GLSL_VERSION);
-  //println( "user.home  : " + System.getProperty("user.home") );
-  //println( "user.dir   : " + System.getProperty("user.dir") );
-  //println( "user.name  : " + System.getProperty("user.name") );
-  //println( "sketchPath : " + sketchPath() );
-  //println( "dataPath:\t" + dataPath(""));
-  //println( "dataFile:\t" + dataFile(""));
   println( "frameRate:\t"+nf(frameRate, 0, 1));
-  //println( "canvas     : width "+width+" height "+height+" pix "+(width*height));
 }
 
 int OS() {
@@ -64,14 +54,15 @@ int OS() {
   String shortOSName = fullOSName.substring(0, 3).toLowerCase();
 
   if (shortOSName.equals("mac")) {
-    // TBD accomodate other mac OS name types
+    // TBD accomodate other mac OS name types (may be, if they vary)
     osn = 0;
   }
   if (shortOSName.equals("lin")) {
+    // TBD accomodate other windows name types (may be, if they vary)
     osn = 1;
   }
   if (shortOSName.equals("win")) {
-    // TBD accomodate other indows name types
+    // TBD accomodate other windows name types (may be, if they vary)
     osn = 2;
   }
 
@@ -80,37 +71,44 @@ int OS() {
 
 String getPythonPath(int _osn) {
   String pyPath = "";
-  if (_osn == 0) {
-    // mac OS specific python3
+
+  switch (_osn) {
+  case 0:
+    // macOS specific portable python3 from tools dir
     // TBD: fix bundled python3 issues.
     // pyPath = sketchPath() + "/tools/python3/macos/python3/python3";
     pyPath = "python3";
-  }
-  if (_osn == 1) {
-    // linux specific python3
+    break;
+  case 1:
+    // linux specific portable python3 from tools dir
     pyPath = sketchPath() + "/tools/python3/linux/python3";
-  }
-  if (_osn == 2) {
-    // windows specific python3
+    break;
+  case 2:
+    // windows specific portable python3 from tools dir
     pyPath = sketchPath() + "\\tools\\python3\\windows\\python3.exe";
+    break;
   }
-
-
 
   return pyPath;
 }
 
 String getPythonProgScptPath(int _osn) {
   String pyScptPath = "";
-  if (_osn == 0 || _osn == 1) {
-    // mac OS ' Linux specific python3
+  switch (_osn) {
+  case 0:
+    // macOS: where the prog.py is kept
     pyScptPath = sketchPath() + "/tools/prog.py";
-  } else if (_osn == 2) {
-    // windows specific python3
+    break;
+  case 1:
+    // linux: where the prog.py is kept
+    pyScptPath = sketchPath() + "/tools/prog.py";
+    break;
+  case 2:
+    // windows: where the prog.py is kept
     pyScptPath = sketchPath() + "\\tools\\prog.py";
-  } else {
-    // TBD:
+    break;
   }
+  
   return pyScptPath;
 }
 
@@ -121,7 +119,7 @@ String getPythonProgScptPath(int _osn) {
 String getJustFileName(String filePath) {
   IntList arrayOfSlashIndices = new IntList();
   int idxOfSlash = 0;
-  //for mac or linux
+  // For mac or linux
   if (OS() == 0 || OS() == 1) {
     idxOfSlash =  filePath.indexOf("/");
     while (idxOfSlash >= 0) {
@@ -133,11 +131,10 @@ String getJustFileName(String filePath) {
     }
   }
 
-  //for windows
+  // For windows
   if (OS() == 2) {
     idxOfSlash =  filePath.indexOf("\\");
     while (idxOfSlash >= 0) {
-      //println(idxOfSlash);
       if (idxOfSlash!=0) {
         arrayOfSlashIndices.append(idxOfSlash);
       }
@@ -145,10 +142,9 @@ String getJustFileName(String filePath) {
     }
   }
 
-  //printArray(arrayOfSlashIndices);
+
   int lastIdxOfSlash = arrayOfSlashIndices.get(arrayOfSlashIndices.size()-1);
   String filename = filePath.substring(lastIdxOfSlash+1, filePath.length());
-  //println(filename);
   return filename;
 }
 
@@ -166,7 +162,6 @@ void binaryFileSelected(File selection) {
 
     // Update binary PATH in flash command
     flash_cmd[16] = binHexFilePath;
-    //printFlashCommand(flash_cmd);
 
     // Save the file path info in a text file, for next time loading
     try {
@@ -195,7 +190,6 @@ void loadAndSetBinaryFilePath(String filename) {
       return ;
     }
     print("\nFOUND BIN PATH FROM INFO FILE:");
-    //binHexFilePath = lines[0]; // the first line is the path of the binary
     binHexFilePath = line; // the first line is the path of the binary
     binHexFileName = getJustFileName(binHexFilePath);
     println(binHexFilePath);

@@ -10,7 +10,7 @@ String[] filterSerialList(StringList allSerialPorts) {
   if (OS() == 0) {
     // mac
     for (String port : allSerialPorts) {
-      // - /dev/tty.usb...
+      // subtring pattern: /dev/tty.usb... (avoid bluetooth and others that appear on tty.xx or cu.xx)
       if (port.substring(5, 12).equals("tty.usb")) {
         //println(port);
         filteredPorts.append(port);
@@ -18,23 +18,21 @@ String[] filterSerialList(StringList allSerialPorts) {
     }
   }
   if (OS() == 1) {
-    // win
-    // TBD
-    filteredPorts = allSerialPorts;
-  }
-  if (OS() == 2) {
     // linux
     for (String port : allSerialPorts) {
-      // - /dev/tty.USB... or /dev/ttyAMA...
+      // subtring pattern: /dev/tty.USB... or /dev/ttyAMA... (avoid tty0-xx and ttys0-xx)
       if (port.substring(5, 12).equals("tty.USB") || port.substring(5, 12).equals("tty.AMA")) {
         //println(port);
         filteredPorts.append(port);
       }
     }
   }
+  if (OS() == 2) {
+    // win : All the ports basically, as nothing else shows up usually as COMxx
+    filteredPorts = allSerialPorts;
+  }
 
   String[] workablePortsArray = filteredPorts.array();
-  //String[] workablePortsArray = allSerialPorts.array();
   return workablePortsArray;
 }
 
@@ -44,9 +42,6 @@ String[] filterSerialList(StringList allSerialPorts) {
 void run_cmd() {
   // While the command is running lock the UI
   lockUIElements();
-  
-  //myTextarea.clear();
-  //console.clear();
 
   printFlashCommand(flash_cmd);
 
@@ -61,13 +56,11 @@ void run_cmd() {
     // 3. Read a line and if it's not null, print it.
     while ((stdIn = buff.readLine()) != null) {
       println(stdIn.toString());
-      //newOutputLine = stdIn.toString();
     }
 
     // 4. Check the exit code to be 100% sure, the command ran successfully (exitCode 0)
     int exitVal = p.waitFor();
     println("EXIT CODE:\t", str(exitVal));
-    //newOutputLine = "EXIT CODE:\t" + str(exitVal);
     buff.close();
 
     if (exitVal == 0) {
@@ -79,8 +72,6 @@ void run_cmd() {
   catch (Exception e) {
     println("\nSome exception happened!");
     return ;
-    //newOutputLine = "some exception happened!";
-    //e.printStackTrace();
   }
 
   /*
@@ -91,6 +82,6 @@ void run_cmd() {
    */
   console = cp5.addConsole(myTextarea);
 
-  //// After the command has ran, Release the UI
+  // After the command has ran, Release the UI
   unlockUIElements();
 }

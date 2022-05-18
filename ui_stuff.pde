@@ -4,10 +4,13 @@ UI elements:
  2. [*][Button] Refresh Ports.
  3. [*][Button] Load binary.
  4. [*][Text] show binary name.
- 5. [-][Button] Upload to HW.
- 6. [TBD] - [Toggle] upload loop.
- 6. [TBD] - [Button] get latest firmware.
- Test on different OS
+ 5. [*][Button] Upload to HW.
+ 6. [TBD][Toggle] upload loop.
+ 7. [TBD][Button] get latest firmware.
+ 8. [*] Test Exported APP on Mac OS.
+ 9. [*] Test Exported APP and adjust on Windows. 
+ 10.[TBD] Test Exported APP on Linux.
+ 11.[TBD] Button to fold/hide and unFold/show Console
  */
 
 
@@ -20,11 +23,9 @@ int highlight_color = #8EB559;
 // font-aweosme icons: https://fontawesome.com/v5/cheatsheet
 int refresh_ico = #00f021;
 int file_ico = #00f15b;
-//int upload_ico = #00f0ab;
-//int upload_ico = #00f074;
 int upload_ico = #00f061;
-int toggle_on_ico = #00f205;
-int toggle_off_ico = #00f204;
+//int toggle_on_ico = #00f205;
+//int toggle_off_ico = #00f204;
 
 
 import controlP5.*;
@@ -79,10 +80,9 @@ void createSerialPortsMenu(ControlFont f) {
   for (int i=0; i<Serial.list().length; i++ ) {
     serialPortsList.append(Serial.list()[i]);
   }
-  //StringList workablePortsList = filterSerialList(serialPortsList);
-  String[] workablePortsArray = filterSerialList(serialPortsList);
-  //printArray(workablePortsArray);
 
+  String[] workablePortsArray = filterSerialList(serialPortsList);
+  
   // Get position related to refresh icon
   float[] position = {
     refresh.getPosition()[0]+refresh.getWidth()+buffGapWidth,
@@ -90,7 +90,6 @@ void createSerialPortsMenu(ControlFont f) {
   };
 
   serialListMenu = cp5.addScrollableList("serialPort")
-    //.setPosition(buffGapWidth, 25)
     .setPosition(position[0], position[1])
     .setSize(220, 100)
     .setBarHeight(objHeights)
@@ -123,7 +122,7 @@ void createUploadFileButton() {
 }
 
 void createBinFileNameDisplay(ControlFont f) {
-  // Get position related to refresh icon
+  // Get position related to upload file icon
   float[] position = {
     uploadFile.getPosition()[0]+uploadFile.getWidth()+buffGapWidth,
     uploadFile.getPosition()[1]
@@ -142,7 +141,7 @@ void createBinFileNameDisplay(ControlFont f) {
 }
 
 void createUploadFirmwareButton() {
-  // Get position related to refresh icon
+  // Get position related to binary's name's space
   float[] position = {
     binFileLabel.getPosition()[0]+binFileLabel.getWidth()+buffGapWidth*3,
     binFileLabel.getPosition()[1]
@@ -159,8 +158,6 @@ void createUploadFirmwareButton() {
 }
 
 
-
-
 void refreshPorts() {
   println("\nREFRESHING SERIAL PORTS...");
   // Create an StringList of all the Serial ports available
@@ -172,34 +169,34 @@ void refreshPorts() {
   String[] workablePortsArray = filterSerialList(serialPortsList);
   printArray(workablePortsArray);
 
-  // Update the list
-  // serialListMenu.addItems(workablePortsArray).update();
+   // Update the list
   serialListMenu.setItems(workablePortsArray).update();
 }
 
+
+
 void serialPort(int n) {
   uploadPortName = serialListMenu.getItem(n).get("text").toString();
-  //println("\nSELECTED PORT:\t", uploadPortName);
-  //serialListMenu.setLabel(uploadPortName).close();
 
   serialListMenu.setLabel(uploadPortName);
   if (serialListMenu.isMouseOver()) {
     serialListMenu.close();
     println("\nSELECTED PORT:\t", uploadPortName);
-    //serialListMenu.close();
   }
 
-
   flash_cmd[6] = uploadPortName; // Update prog.py's PATH in flash command
-  //printFlashCommand(flash_cmd);
 }
 
-void selectBinary(int val) {
+
+
+void selectBinary() {
   //println("\nUPLOAD FILE  .");
   selectInput("\nSELECT BINARY HEX FILE TO UPLAOD:", "binaryFileSelected");
 }
 
-void burnBinary(int n) {
+
+
+void burnBinary() {
   if (pythonPath == null || pythonPath.equals("") || pythonPath.equals("PYTHON_PATH")) {
     println("\nWARNING:\t Python path was not set / could not be found!");
     return ;
@@ -254,7 +251,7 @@ void keyPressed() {
     ;
   }
   if (key == 'f' || key == 'F') {
-    burnBinary(1);
+    burnBinary();
   }
 
 
@@ -306,10 +303,10 @@ void keyPressed() {
       }
       break;
     case 2:
-      selectBinary(1);
+      selectBinary();
       break;
     case -1:
-      burnBinary(1);
+      burnBinary();
       break;
     }
   }
