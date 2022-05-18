@@ -194,7 +194,7 @@ void binaryFileSelected(File selection) {
       println("INVALID FILE NAME/TYPE");
       println("The File has either SPACE/S or one of these characters (/ \\ *) in it.");
       println("Please RENAME the file without these characters");
-      println("NOTE: Although you can use \"_\" in the file name");
+      println("\nNOTE: Although you can use \"_\" in the file name");
 
       enableFlashing = false;
       //selection = null;
@@ -207,10 +207,10 @@ void binaryFileSelected(File selection) {
       output.println(binHexFilePath);
       output.flush(); // Writes the remaining data to the file
       output.close();
-      println("INFO FILE SAVED WITH BIN PATH INFO");
+      println("\nINFO FILE SAVED WITH BIN PATH INFO");
     }
     catch (Exception e) {
-      println("ERROR: [X] FILE COULD NOT BE SAVED!");
+      println("\nERROR: [X] INFO FILE containing just loaded firmware's path could not be saved");
       return ;
     }
 
@@ -241,7 +241,7 @@ void loadAndSetBinaryFilePath(String filename) {
     binHexFilePath = line; // the first line is the path of the binary
     binHexFileName = getJustFileName(binHexFilePath);
 
-    // TBD mitigate some spl chars in file names and re-format the Path
+    // Mitigate some spl chars in file names and re-format the Path
     // binHexFilePath = accountForSpaces(binHexFilePath);
     if (fileNameOk(binHexFileName) == false) {
       enableFlashing = false;
@@ -249,7 +249,7 @@ void loadAndSetBinaryFilePath(String filename) {
       println("Tempered the name in the log (where we logged the last used file's location)");
       println("Now it has either SPACE/S or these characters (/ \\ *) in it.");
       println("Please RENAME the file name there (in the log file) and remove these characters.");
-      println("NOTE: You can use \"_\" in the file name");
+      println("\nNOTE: You can use \"_\" in the file name");
 
       enableFlashing = false;
       return ;
