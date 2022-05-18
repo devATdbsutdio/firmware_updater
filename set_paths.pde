@@ -32,6 +32,16 @@ String[] flash_cmd = {
   "write"
 };
 
+
+void sysinfo() {
+  println( "SYS INFO :");
+  println( "System:\t" + System.getProperty("os.name") + "  " + System.getProperty("os.version") + "  " + System.getProperty("os.arch") );
+  println( "JAVA:\t" + System.getProperty("java.home")  + " rev: " +javaVersionName);
+}
+
+
+
+
 void printFlashCommand(String[] cmd) {
   StringBuffer cmd_buffer = new StringBuffer();
   for (int i = 0; i < cmd.length; i++) {
@@ -67,14 +77,6 @@ boolean fileNameOk(String fp) {
 }
 
 
-
-void sysinfo() {
-  println( "SYS INFO :");
-  println( "System:\t" + System.getProperty("os.name") + "  " + System.getProperty("os.version") + "  " + System.getProperty("os.arch") );
-  println( "JAVA:\t" + System.getProperty("java.home")  + " rev: " +javaVersionName);
-  println( "frameRate:\t"+nf(frameRate, 0, 1));
-}
-
 int OS() {
   int osn = 0;
 
@@ -103,7 +105,7 @@ String getPythonPath(int _osn) {
   switch (_osn) {
   case 0:
     // macOS specific portable python3 from tools dir
-    // TBD: fix bundled python3 issues.
+    // TBD fix bundled python3 issues.
     // pyPath = sketchPath() + "/tools/python3/macos/python3/python3";
     pyPath = "python3";
     break;
@@ -184,8 +186,7 @@ void binaryFileSelected(File selection) {
     binHexFilePath = selection.getAbsolutePath();
     binHexFileName = getJustFileName(binHexFilePath);
 
-    // TBD Mitigate some in file names and re-format the Path
-    //binHexFilePath = accountForSpaces(binHexFilePath);
+    // Mitigate some in file names and re-format the Path
     fileNameOk(binHexFileName);
 
     if (fileNameOk(binHexFileName) == false) {
