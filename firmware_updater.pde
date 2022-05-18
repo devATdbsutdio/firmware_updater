@@ -50,15 +50,8 @@ void setup() {
   // ------------------------------------------------------------------------//
   loadAndSetBinaryFilePath(binPathInfoFile);
 
-
   createUploadFirmwareButton(fontR14);
 }
-
-
-
-BufferedReader reader;
-InputStream inputStream;
-
 
 
 void draw() {
