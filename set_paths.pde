@@ -226,6 +226,6 @@ void loadAndSetBinaryFilePath(String filename) {
   }
   catch (Exception e) {
     println("NO INFO FILE FOUND!\n");
-    printArray(e);
+    //println(e);
   }
 }
