@@ -66,13 +66,13 @@ int OS() {
   if (shortOSName.equals("mac")) {
     // TBD accomodate other mac OS name types
     osn = 0;
-  } else if (shortOSName.equals("win")) {
-    // TBD accomodate other indows name types
+  }
+  if (shortOSName.equals("lin")) {
     osn = 1;
-  } else if (shortOSName.equals("lin")) {
+  }
+  if (shortOSName.equals("win")) {
+    // TBD accomodate other indows name types
     osn = 2;
-  } else {
-    osn = 3;
   }
 
   return osn;
@@ -82,34 +82,32 @@ String getPythonPath(int _osn) {
   String pyPath = "";
   if (_osn == 0) {
     // mac OS specific python3
-    // TBD: fix bundled python3 issues. 
-    //pyPath = sketchPath() + "/tools/python3/macos/python3/python3";
+    // TBD: fix bundled python3 issues.
+    // pyPath = sketchPath() + "/tools/python3/macos/python3/python3";
     pyPath = "python3";
-  } else if (_osn == 1) {
+  }
+  if (_osn == 1) {
+    // linux specific python3
+    pyPath = sketchPath() + "/tools/python3/linux/python3";
+  }
+  if (_osn == 2) {
     // windows specific python3
     pyPath = sketchPath() + "\\tools\\python3\\windows\\python3.exe";
-  } else if (_osn == 2) {
-    // linux specific python3
-    //pyPath = sketchPath() + "/tools/python3/linux/python3";
-    pyPath = "python3";
-  } else {
-    // TBD: Run shell command which python3 and grab the result
   }
+
+
 
   return pyPath;
 }
 
 String getPythonProgScptPath(int _osn) {
   String pyScptPath = "";
-  if (_osn == 0) {
-    // mac OS specific python3
+  if (_osn == 0 || _osn == 1) {
+    // mac OS ' Linux specific python3
     pyScptPath = sketchPath() + "/tools/prog.py";
-  } else if (_osn == 1) {
+  } else if (_osn == 2) {
     // windows specific python3
     pyScptPath = sketchPath() + "\\tools\\prog.py";
-  } else if (_osn == 2) {
-    // linux specific python3
-    pyScptPath = sketchPath() + "/tools/prog.py";
   } else {
     // TBD:
   }
@@ -124,7 +122,7 @@ String getJustFileName(String filePath) {
   IntList arrayOfSlashIndices = new IntList();
   int idxOfSlash = 0;
   //for mac or linux
-  if (OS() == 0 || OS() == 2) {
+  if (OS() == 0 || OS() == 1) {
     idxOfSlash =  filePath.indexOf("/");
     while (idxOfSlash >= 0) {
       //println(idxOfSlash);
@@ -136,7 +134,7 @@ String getJustFileName(String filePath) {
   }
 
   //for windows
-  if (OS() == 1) {
+  if (OS() == 2) {
     idxOfSlash =  filePath.indexOf("\\");
     while (idxOfSlash >= 0) {
       //println(idxOfSlash);
