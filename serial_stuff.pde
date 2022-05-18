@@ -43,7 +43,7 @@ String[] filterSerialList(StringList allSerialPorts) {
 
 void run_cmd() {
   // While the command is running lock the UI
-  //lockUIElements();
+  lockUIElements();
   
   //myTextarea.clear();
   //console.clear();
@@ -88,8 +88,8 @@ void run_cmd() {
   // or basicaly I don't know if the thread is called again, but I do not see any text output in the
   // sketch console.
   // */
-  //console = cp5.addConsole(myTextarea);
+  console = cp5.addConsole(myTextarea);
 
   //// After the command has ran, Release the UI
-  //unlockUIElements();
+  unlockUIElements();
 }
