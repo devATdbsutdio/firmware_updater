@@ -32,8 +32,8 @@ void setup() {
   // ----------------------------------------------------------------------------- //
   // Update python's PATH and prog.py's PATHs and consequitevly, the flash command. 
   // ----------------------------------------------------------------------------- //
-  //pythonPath = getPythonPath(OS());
-  pythonPath = "python3";
+  pythonPath = getPythonPath(OS());
+  //pythonPath = "python3";
   progFilePath = getPythonProgScptPath(OS());
   flash_cmd[0] = pythonPath; // Update python's PATH in flash command
   flash_cmd[2] = progFilePath; // Update prog.py's PATH in flash command

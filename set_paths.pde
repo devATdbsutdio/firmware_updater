@@ -71,6 +71,10 @@ int OS() {
   } else {
     osn = 3;
   }
+  
+  // TEST
+  osn = 1;
+  
   return osn;
 }
 
@@ -78,13 +82,15 @@ String getPythonPath(int _osn) {
   String pyPath = "";
   if (_osn == 0) {
     // mac OS specific python3
-    pyPath = sketchPath() + "/tools/python3/macos/python3";
+    //pyPath = sketchPath() + "/tools/python3/macos/python3";
+    pyPath = "python3";
   } else if (_osn == 1) {
     // windows specific python3
     pyPath = sketchPath() + "\\tools\\python3\\windows\\python3.exe";
   } else if (_osn == 2) {
     // linux specific python3
-    pyPath = sketchPath() + "/tools/python3/linux/python3";
+    //pyPath = sketchPath() + "/tools/python3/linux/python3";
+    pyPath = "python3";
   } else {
     // TBD: Run shell command which python3 and grab the result
   }
