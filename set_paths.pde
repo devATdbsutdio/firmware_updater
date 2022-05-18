@@ -62,9 +62,7 @@ int OS() {
   
   String fullOSName = System.getProperty("os.name");
   String shortOSName = fullOSName.substring(0, 3).toLowerCase();
-  //println(shortOSName);
   
-
   if (shortOSName.equals("mac")) {
     // TBD accomodate other mac OS name types
     osn = 0;
