@@ -168,7 +168,7 @@ void refreshPorts(int val) {
   for (int i=0; i<Serial.list().length; i++ ) {
     serialPortsList.append(Serial.list()[i]);
   }
-  // StringList workablePortsList = filterSerialList(serialPortsList);
+
   String[] workablePortsArray = filterSerialList(serialPortsList);
   printArray(workablePortsArray);
 

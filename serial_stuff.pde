@@ -25,16 +25,16 @@ String[] filterSerialList(StringList allSerialPorts) {
   if (OS() == 2) {
     // linux
     for (String port : allSerialPorts) {
-      // - /dev/tty.USB...
-      if (port.substring(5, 12).equals("tty.USB")) {
+      // - /dev/tty.USB... or /dev/ttyAMA...
+      if (port.substring(5, 12).equals("tty.USB") || port.substring(5, 12).equals("tty.AMA")) {
         //println(port);
         filteredPorts.append(port);
       }
     }
   }
 
-  //String[] workablePortsArray = filteredPorts.array();
-  String[] workablePortsArray = allSerialPorts.array();
+  String[] workablePortsArray = filteredPorts.array();
+  //String[] workablePortsArray = allSerialPorts.array();
   return workablePortsArray;
 }
 
