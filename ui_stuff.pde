@@ -11,6 +11,7 @@ UI elements:
  9. [*] Test Exported APP and adjust on Windows. 
  10.[TBD] Test Exported APP on Linux.
  11.[TBD] Button to fold/hide and unFold/show Console
+ 12.[BUG] icon lock doesn;t work
  */
 
 
