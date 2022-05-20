@@ -42,85 +42,85 @@ String[] filterSerialList(StringList allSerialPorts) {
 
 
 void run_cmd() {
-  if (!enableFlashing) {
-    println("\n[WARNING]");
-    println("The attempted file selection didn't work because of invalid filename");
-    println("And you tried to flash!");
-    println("So we are stopping this attempt to flash firmware file");
-    /*
-     Don't know why I had to instantiate console here again. But this came out of trail and error.
-     Or else if we use println(), in this threaded fucntion, then we can only call the thread once,
-     or basicaly I don't know if the thread is called again, but I do not see any text output in the
-     sketch console.
-     */
-    console = cp5.addConsole(myTextarea);
-    return ;
-  }
+  //if (!enableFlashing) {
+  //  println("\n[WARNING]");
+  //  println("The attempted file selection didn't work because of invalid filename");
+  //  println("And you tried to flash!");
+  //  println("So we are stopping this attempt to flash firmware file");
+  //  /*
+  //   Don't know why I had to instantiate console here again. But this came out of trail and error.
+  //   Or else if we use println(), in this threaded fucntion, then we can only call the thread once,
+  //   or basicaly I don't know if the thread is called again, but I do not see any text output in the
+  //   sketch console.
+  //   */
+  //  console = cp5.addConsole(myTextarea);
+  //  return ;
+  //}
 
   // Also Check if flashing firmware truely exists
-  File f = new File(flash_cmd[16]);
-  if (!f.exists()) {
-    println("\n[WARNING]");
-    println("Previously used file", flash_cmd[16], "doesn't exist!");
-    println("And you tried to flash!");
-    println("So we are stopping this attempt to flash firmware file");
-    println("\nReload the firmware file to flash");
+  //File f = new File(flash_cmd[16]);
+  //if (!f.exists()) {
+  //  println("\n[WARNING]");
+  //  println("Previously used file", flash_cmd[16], "doesn't exist!");
+  //  println("And you tried to flash!");
+  //  println("So we are stopping this attempt to flash firmware file");
+  //  println("\nReload the firmware file to flash");
     /*
      Don't know why I had to instantiate console here again. But this came out of trail and error.
      Or else if we use println(), in this threaded fucntion, then we can only call the thread once,
      or basicaly I don't know if the thread is called again, but I do not see any text output in the
      sketch console.
      */
-    console = cp5.addConsole(myTextarea);
-    return ;
-  }
+  //  console = cp5.addConsole(myTextarea);
+  //  return ;
+  //}
 
   println("\nPreviously used file exists!");
   println();
 
 
   // While the command is running lock the UI
-  lockUIElements();
+  //lockUIElements();
 
-  printFlashCommand(flash_cmd);
+  //printFlashCommand(flash_cmd);
 
-  // 1. Run the command
-  try {
-    //Process p = Runtime.getRuntime().exec(cmd);
-    Process p = Runtime.getRuntime().exec(flash_cmd);
-    // 2. Create a buffer reader to capture input stream. (Note: we are not capturing error stream
-    // but it can be done)
-    BufferedReader buff = new BufferedReader(new InputStreamReader(p.getInputStream()));
-    String stdIn = null;
-    // 3. Read a line and if it's not null, print it.
-    while ((stdIn = buff.readLine()) != null) {
-      println(stdIn.toString());
-    }
+  //// 1. Run the command
+  //try {
+  //  //Process p = Runtime.getRuntime().exec(cmd);
+  //  Process p = Runtime.getRuntime().exec(flash_cmd);
+  //  // 2. Create a buffer reader to capture input stream. (Note: we are not capturing error stream
+  //  // but it can be done)
+  //  BufferedReader buff = new BufferedReader(new InputStreamReader(p.getInputStream()));
+  //  String stdIn = null;
+  //  // 3. Read a line and if it's not null, print it.
+  //  while ((stdIn = buff.readLine()) != null) {
+  //    println(stdIn.toString());
+  //  }
 
-    // 4. Check the exit code to be 100% sure, the command ran successfully (exitCode 0)
-    int exitVal = p.waitFor();
-    println("EXIT CODE:\t", str(exitVal));
-    buff.close();
+  //  // 4. Check the exit code to be 100% sure, the command ran successfully (exitCode 0)
+  //  int exitVal = p.waitFor();
+  //  println("EXIT CODE:\t", str(exitVal));
+  //  buff.close();
 
-    if (exitVal == 0) {
-      println("\n --- SUCCESFULLY FLASHED FIRMWARE: " + binHexFileName + "  ---");
-    } else {
-      println("\n --- ERROR WHILE FLASHING FIRMWARE: " + binHexFileName + " ---");
-    }
-  }
-  catch (Exception e) {
-    println("\nSome exception happened!");
-    return ;
-  }
+  //  if (exitVal == 0) {
+  //    println("\n --- SUCCESFULLY FLASHED FIRMWARE: " + binHexFileName + "  ---");
+  //  } else {
+  //    println("\n --- ERROR WHILE FLASHING FIRMWARE: " + binHexFileName + " ---");
+  //  }
+  //}
+  //catch (Exception e) {
+  //  println("\nSome exception happened!");
+  //  return ;
+  //}
 
-  /*
-   Don't know why I had to instantiate console here again. But this came out of trail and error.
-   Or else if we use println(), in this threaded fucntion, then we can only call the thread once,
-   or basicaly I don't know if the thread is called again, but I do not see any text output in the
-   sketch console.
-   */
-  console = cp5.addConsole(myTextarea);
+  ///*
+  // Don't know why I had to instantiate console here again. But this came out of trail and error.
+  // Or else if we use println(), in this threaded fucntion, then we can only call the thread once,
+  // or basicaly I don't know if the thread is called again, but I do not see any text output in the
+  // sketch console.
+  // */
+  //console = cp5.addConsole(myTextarea);
 
-  // After the command has ran, Release the UI
-  unlockUIElements();
+  //// After the command has ran, Release the UI
+  //unlockUIElements();
 }
