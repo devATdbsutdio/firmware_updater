@@ -11,7 +11,7 @@ UI elements:
  9. [*] Test Exported APP and adjust on Windows. 
  10.[TBD] Test Exported APP on Linux.
  11.[TBD] Button to fold/hide and unFold/show Console
- 12.[BUG] icon lock doesn;t work
+ 12.[BUG] icon lock doesn't work
  */
 
 
@@ -77,6 +77,12 @@ void createRefreshSerialPortsButton() {
 
 void createSerialPortsMenu(ControlFont f) {
   // Create an StringList of all the Serial ports available
+  
+  // [TBD] for Linux
+  if(OS() == 1){
+    exit();
+  }
+  
   StringList serialPortsList = new StringList();
   for (int i=0; i<Serial.list().length; i++ ) {
     serialPortsList.append(Serial.list()[i]);
