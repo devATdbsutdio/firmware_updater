@@ -1,6 +1,23 @@
 # firmware_updater
 ![Screenshot 2022-05-25 at 3 00 23 PM](https://user-images.githubusercontent.com/4619862/170200211-0835a531-3686-45f0-94be-1ac9f9143278.png)
 
+### Operation:
+1. Open the application. 
+2. Plug in your programmer to your computer (programmer should be attached to the main board as well through UPDI pinouts). 
+3. Click on the <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/5.x/svgs/solid/sync-alt.svg" width="20" height="20"> to refresh serial port. Everytime the programmer is changed or replugged in, do not forget to refresh the ports. 
+5. Select your port from dropdown list 
+6. Click on the <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/5.x/svgs/solid/file.svg" width="20" height="20"> to select the binary (.hex file) of the firmware (from the location where you downloaded it)
+7. When ready, click on the <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/5.x/svgs/solid/arrow-right.svg" width="20" height="20"> to flash the firmware. 
+
+Keyboard shortcuts: 
+1. `h/H` to toggle show hide console.
+2. `r/R` to refresh serial ports list. (STEP-3)
+3. `f/F` to flash binary. (STEP-7)
+4. `ESC` to Quit.
+5. `TAB` to cycle through <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/5.x/svgs/solid/sync-alt.svg" width="20" height="20"> <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/5.x/svgs/solid/file.svg" width="20" height="20"> <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/5.x/svgs/solid/arrow-right.svg" width="20" height="20">
+6. While __tabbing__, press `ENTER/RETURN` to commit/select an operation. 
+7. To get out of __tabbing__, perform `LEFT-MOUSE` click. 
+
 
 ## Prerequisites:
 ### Check / Install Python on your system:
