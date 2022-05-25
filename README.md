@@ -6,7 +6,7 @@
 2. Plug in your programmer to your computer (programmer should be attached to the main board as well through UPDI pinouts). 
 3. Click on the <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/5.x/svgs/solid/sync-alt.svg" width="20" height="20"> to refresh serial port. Everytime the programmer is changed or replugged in, do not forget to refresh the ports. 
 5. Select your port from dropdown list 
-6. Click on the <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/5.x/svgs/solid/file.svg" width="20" height="20"> to select the binary (.hex file) of the firmware (from the location where you downloaded it)
+6. Click on the <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/5.x/svgs/solid/file.svg" width="20" height="20"> to select the firmware binary i.e. [watch_firmware.hex](https://watchfirmware.s3.ap-northeast-1.amazonaws.com/watch_firmware.hex) (from the location where you downloaded it)
 7. When ready, click on the <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/5.x/svgs/solid/arrow-right.svg" width="20" height="20"> to flash the firmware. 
 
 Keyboard shortcuts: 
