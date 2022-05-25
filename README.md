@@ -1,7 +1,7 @@
 # firmware_updater
 ![Screenshot 2022-05-25 at 3 00 23 PM](https://user-images.githubusercontent.com/4619862/170200211-0835a531-3686-45f0-94be-1ac9f9143278.png)
 
-### Operation:
+## Operation:
 1. Open the application. 
 2. Plug in your programmer to your computer (programmer should be attached to the main board as well through UPDI pinouts). 
 3. Click on the <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/5.x/svgs/solid/sync-alt.svg" width="20" height="20"> to refresh serial port. Everytime the programmer is changed or replugged in, do not forget to refresh the ports. 
@@ -35,11 +35,11 @@ Keyboard shortcuts:
 3. __Linux users__: Follow this guide [here](https://gist.github.com/dattasaurabh82/082d13fd61c0d06c7a358c5e605ce4fd). 
 
 
-### Binaries: 
+## Binaries: 
 1. [Mac app](https://github.com/devATdbsutdio/firmware_updater/releases/download/v1.0.0b/macos-x86_64.zip): Tested, for now, only on Intel Chips and not on M1 Macs and on latest (20/05/2022)  Mac OS Monterey (12.3.1)
 2. [Win exe](https://github.com/devATdbsutdio/firmware_updater/releases/download/v1.0.0b/windows-amd64.zip): Tested, for now, only on Windows 10 stable release. 
 
-### Note for Linux users: 
+## Note for Linux users: 
 _Binaries are not yet ready for Linux Users unfortunately due to issues below (which we are trying to solve)_
 > The Serial port access issue from GUI frame work. Posted [here](https://github.com/processing/processing4/issues/490) and [here](https://discourse.processing.org/t/serial-list-on-linux-doesnt-seem-to-work/37075)
 
