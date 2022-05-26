@@ -5,13 +5,12 @@ UI elements:
  3. [*][Button] Load binary.
  4. [*][Text] show binary name.
  5. [*][Button] Upload to HW.
- 6. [TBD][Toggle] upload loop.
- 7. [TBD][Button] get latest firmware.
- 8. [*] Test Exported APP on Mac OS.
- 9. [*] Test Exported APP and adjust on Windows.
- 10.[TBD] Test Exported APP on Linux.
- 11.[TBD] Button to fold/hide and unFold/show Console
- 12.[BUG] icon lock doesn't work
+ 7. [*] Test Exported APP on Mac OS.
+ 8. [*] Test Exported APP and adjust on Windows.
+ 9. [TBD] Test Exported APP on Linux.
+ 10.[MAYBE] Button to fold/hide and unFold/show Console.
+ 11.[*] Icon lock/unlock bug resolve.
+ 12.[TBD] key board shortcut to show debugg port controls
  */
 
 
@@ -238,23 +237,41 @@ void burnBinary() {
 }
 
 void lockUIElements() {
-  refresh.lock();
-  uploadFile.lock();
-  burnFirmware.lock();
+  refresh.lock()
+    .setMouseOver(false)
+    .setUpdate(false)
+    .setColorForeground(color(locked_color))
+    ;
 
-  refresh.setColorForeground(color(locked_color));
-  uploadFile.setColorForeground(color(locked_color));
-  burnFirmware.setColorForeground(color(locked_color));
+  uploadFile.lock()
+    .setMouseOver(false)
+    .setUpdate(false)
+    .setColorForeground(color(locked_color))
+    ;
+
+  burnFirmware.lock()
+    .setMouseOver(false)
+    .setUpdate(false)
+    .setColorForeground(color(locked_color))
+    ;
 }
 
-void unlockUIElements() {
-  refresh.unlock();
-  uploadFile.unlock();
-  burnFirmware.unlock();
 
-  refresh.setColorForeground(color(yellow_color));
-  uploadFile.setColorForeground(color(yellow_color));
-  burnFirmware.setColorForeground(color(yellow_color));
+void unlockUIElements() {
+  refresh.unlock()
+    .setUpdate(true)
+    .setColorForeground(color(yellow_color))
+    ;
+
+  uploadFile.unlock()
+    .setUpdate(true)
+    .setColorForeground(color(yellow_color))
+    ;
+
+  burnFirmware.unlock()
+    .setUpdate(true)
+    .setColorForeground(color(yellow_color))
+    ;
 }
 
 
