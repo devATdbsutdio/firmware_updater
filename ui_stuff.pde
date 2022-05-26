@@ -7,7 +7,7 @@ UI elements:
  5. [*][Button] Upload to HW.
  7. [*] Test Exported APP on Mac OS.
  8. [*] Test Exported APP and adjust on Windows.
- 9. [TBD] Test Exported APP on Linux.
+ 9. [TBD] Test Exported APP on Linux. (yaml lib used by prog.py not working asked developer)
  10.[MAYBE] Button to fold/hide and unFold/show Console.
  11.[*] Icon lock/unlock bug resolve.
  12.[TBD] key board shortcut to show debugg port controls
