@@ -5,11 +5,11 @@ Serial uploadPort;
 boolean enableFlashing = false;
 
 
-StringList getSerialPortsInLinux(String[] _cmd) {
+StringList getSerialPortsInLinux() {
   StringList serialPortsList = new StringList();
+  String[] get_ports_cmd = {"bash", "-c", "ls /dev/tty*"};
   try {
-    //String[] get_ports_cmd = {"ls", "/dev/tty*"};
-    Process p = Runtime.getRuntime().exec(_cmd);
+    Process p = Runtime.getRuntime().exec(get_ports_cmd);
     // 2. Create a buffer reader to capture input stream. (Note: we are not capturing error stream
     // but it can be done)
     BufferedReader buff = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -56,7 +56,7 @@ String[] filterSerialList(StringList allSerialPorts) {
       //  //println(port);
       //  filteredPorts.append(port);
       //}
-      
+
       // test
       filteredPorts = allSerialPorts;
     }

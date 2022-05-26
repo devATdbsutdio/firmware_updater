@@ -81,10 +81,8 @@ void createSerialPortsMenu(ControlFont f) {
 
   // For Linux -> **Spl method due to bug for which Serial.list() doesn't work in linux
   if (OS() == 1) {
-    // command to grab list serial ports in bash
-    String[] cmd = {"bash", "-c", "ls /dev/tty.*"};
-    //printArray(get_serial_ports_in_linux(cmd));
-    serialPortsList = getSerialPortsInLinux(cmd);
+    //printArray(get_serial_ports_in_linux());
+    serialPortsList = getSerialPortsInLinux();
   }
   // For mac and win
   if (OS() == 0 || OS() == 2) {
@@ -177,10 +175,8 @@ void refreshPorts() {
 
   // For Linux -> **Spl method due to bug for which Serial.list() doesn't work in linux
   if (OS() == 1) {
-    // command to grab list serial ports in bash
-    String[] cmd = {"bash", "-c", "ls /dev/tty.*"};
-    //printArray(get_serial_ports_in_linux(cmd));
-    serialPortsList = getSerialPortsInLinux(cmd);
+    //printArray(get_serial_ports_in_linux());
+    serialPortsList = getSerialPortsInLinux();
   }
   // For mac and win
   if (OS() == 0 || OS() == 2) {
