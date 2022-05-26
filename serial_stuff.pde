@@ -52,10 +52,13 @@ String[] filterSerialList(StringList allSerialPorts) {
     // linux
     for (String port : allSerialPorts) {
       // subtring pattern: /dev/tty.USB... or /dev/ttyAMA... (avoid tty0-xx and ttys0-xx)
-      if (port.substring(5, 12).equals("tty.USB") || port.substring(5, 12).equals("tty.AMA")) {
-        //println(port);
-        filteredPorts.append(port);
-      }
+      //if (port.substring(5, 12).equals("ttyUSB") || port.substring(5, 12).equals("ttyAMA")) {
+      //  //println(port);
+      //  filteredPorts.append(port);
+      //}
+      
+      // test
+      filteredPorts = allSerialPorts;
     }
   }
   if (OS() == 2) {
