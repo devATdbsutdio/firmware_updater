@@ -35,7 +35,10 @@ ControlP5 cp5;
 Textarea myTextarea;
 Println console;
 Icon refresh;
-ScrollableList serialListMenu;
+ScrollableList uploadSerialListMenu;
+Textlabel uploadPortLabel;
+ScrollableList debugSerialListMenu;
+Textlabel debugPortLabel;
 Icon uploadFile;
 Textarea binFileLabel;
 Icon burnFirmware;
@@ -45,7 +48,8 @@ Textlabel burn;
 int buffGapWidth = 10;
 int objHeights = 25;
 int consoleYPos = 128;
-
+int listItemHeight = 100;
+int listItemWidth = 220;
 
 
 void setupOnScreenConsosle(ControlFont f) {
@@ -74,7 +78,22 @@ void createRefreshSerialPortsButton() {
 }
 
 
-void createSerialPortsMenu(ControlFont f) {
+void createUploadPortsLabel(ControlFont f) {
+  // Get position related to refresh icon
+  float[] position = {
+    refresh.getPosition()[0]+refresh.getWidth()+buffGapWidth,
+    refresh.getPosition()[1]-12
+  };
+
+  uploadPortLabel = cp5.addTextlabel("UPLOAD PORT")
+    .setPosition(position[0], position[1])
+    .setColorValue(100)
+    .setFont(f)
+    .setText("UPLOAD PORT")
+    ;
+}
+
+void createUploadPortsMenu(ControlFont f) {
   // Create an StringList of all the Serial ports available
   StringList serialPortsList = new StringList();
 
@@ -98,12 +117,12 @@ void createSerialPortsMenu(ControlFont f) {
     refresh.getPosition()[1]
   };
 
-  serialListMenu = cp5.addScrollableList("serialPort")
+  uploadSerialListMenu = cp5.addScrollableList("uploadPort")
     .setPosition(position[0], position[1])
-    .setSize(220, 100)
+    .setSize(listItemWidth, listItemHeight)
     .setBarHeight(objHeights)
     .setFont(f)
-    .setLabel("Ports ...")
+    .setLabel("Select upload port . . .")
     .setColorLabel(washed_text_color)
     .setItemHeight(objHeights)
     .addItems(workablePortsArray)
@@ -111,13 +130,78 @@ void createSerialPortsMenu(ControlFont f) {
     .setType(ScrollableList.LIST)
     .close()
     ;
+
+  createUploadPortsLabel(f);
 }
+
+
+
+void createDebugPortsLabel(ControlFont f) {
+  // Get position related to refresh icon
+  float[] position = {
+    refresh.getPosition()[0]+refresh.getWidth()+buffGapWidth,
+    debugSerialListMenu.getPosition()[1] - 12
+  };
+
+  debugPortLabel = cp5.addTextlabel("DEBUG PORT")
+    .setPosition(position[0], position[1])
+    .setColorValue(100)
+    .setFont(f)
+    .setText("DEBUG   PORT")
+    .hide()
+    ;
+}
+
+
+void createDebugPortsMenu(ControlFont f) {
+  // Create an StringList of all the Serial ports available
+  StringList serialPortsList = new StringList();
+
+  // For Linux -> **Spl method due to bug for which Serial.list() doesn't work in linux
+  if (OS() == 1) {
+    //printArray(get_serial_ports_in_linux());
+    serialPortsList = getSerialPortsInLinux();
+  }
+  // For mac and win
+  if (OS() == 0 || OS() == 2) {
+    for (int i=0; i<Serial.list().length; i++ ) {
+      serialPortsList.append(Serial.list()[i]);
+    }
+  }
+
+  String[] workablePortsArray = filterSerialList(serialPortsList);
+
+  // Get position related to refresh icon & uploadSerialListMenu
+  float[] position = {
+    refresh.getPosition()[0]+refresh.getWidth()+buffGapWidth,
+    refresh.getPosition()[1]+buffGapWidth+listItemHeight/2.5,
+  };
+
+  debugSerialListMenu = cp5.addScrollableList("debugPort")
+    .setPosition(position[0], position[1])
+    .setSize(listItemWidth, listItemHeight)
+    .setBarHeight(objHeights)
+    .setFont(f)
+    .setLabel("Select debug port . . .")
+    .setColorLabel(washed_text_color)
+    .setItemHeight(objHeights)
+    .addItems(workablePortsArray)
+    //.setType(ScrollableList.DROPDOWN) // currently supported DROPDOWN and LIST
+    .setType(ScrollableList.LIST)
+    .close()
+    .hide()
+    ;
+
+  createDebugPortsLabel(f);
+}
+
+
 
 void createUploadFileButton() {
   // Get position related to refresh icon
   float[] position = {
-    serialListMenu.getPosition()[0]+serialListMenu.getWidth()+buffGapWidth*2,
-    serialListMenu.getPosition()[1]
+    uploadSerialListMenu.getPosition()[0]+uploadSerialListMenu.getWidth()+buffGapWidth*2,
+    uploadSerialListMenu.getPosition()[1]
   };
 
   uploadFile = cp5.addIcon("selectBinary", objHeights-2)
@@ -188,22 +272,43 @@ void refreshPorts() {
   printArray(workablePortsArray);
 
   // Update the list
-  serialListMenu.setItems(workablePortsArray).update();
+  uploadSerialListMenu.setItems(workablePortsArray).update();
 }
 
 
 
-void serialPort(int n) {
-  uploadPortName = serialListMenu.getItem(n).get("text").toString();
+void uploadPort(int n) {
+  uploadPortName = uploadSerialListMenu.getItem(n).get("text").toString();
 
-  serialListMenu.setLabel(uploadPortName);
-  if (serialListMenu.isMouseOver()) {
-    serialListMenu.close();
-    println("\nSELECTED PORT:\t", uploadPortName);
+  uploadSerialListMenu.setLabel(uploadPortName);
+  if (uploadSerialListMenu.isMouseOver()) {
+    uploadSerialListMenu.close();
+    println("\nSELECTED UPLOAD PORT:\t", uploadPortName);
   }
 
   flash_cmd[6] = uploadPortName; // Update prog.py's PATH in flash command
 }
+
+void debugPort(int n) {
+  debugPortName = debugSerialListMenu.getItem(n).get("text").toString();
+
+  debugSerialListMenu.setLabel(debugPortName);
+  if (debugSerialListMenu.isMouseOver()) {
+    debugSerialListMenu.close();
+    if (!debugPortName.equals(uploadPortName)) {
+      enableDebugPortOpening = true;
+      // unique debug port has been selected
+      println("\nSELECTED DEBUG PORT:\t", debugPortName);
+    } else {
+      enableDebugPortOpening = false;
+      // warn user that it is same as upload port
+      println("\nSELECTED DEBUG PORT:\t", debugPortName, "\t IS SAME AS UPLOAD PORT");
+      println("PLEASSE CHANGE!");
+      println("");
+    }
+  }
+}
+
 
 
 
@@ -227,7 +332,7 @@ void burnBinary() {
     println("\nWARNING:\t Binary hex file's path was not set / could not be found!");
     return ;
   }
-  if (uploadPortName == null || uploadPortName.equals("") || uploadPortName.equals("SERIAL_PORT")) {
+  if (uploadPortName == null || uploadPortName.equals("") || uploadPortName.equals("UPLOAD_PORT")) {
     println("\nWARNING:\t Serial port was not selected!");
     return ;
   }
@@ -299,15 +404,15 @@ void keyPressed() {
       burnFirmware.setColorForeground(color(yellow_color));
       break;
     case 1:
-      //serialListMenu.setMouseOver(false);
-      serialListMenu.open();
+      //uploadSerialListMenu.setMouseOver(false);
+      uploadSerialListMenu.open();
       refresh.setColorForeground(color(yellow_color));
       uploadFile.setColorForeground(color(yellow_color));
       burnFirmware.setColorForeground(color(yellow_color));
       break;
     case 2:
-      //serialListMenu.setMouseOver(true);
-      serialListMenu.close();
+      //uploadSerialListMenu.setMouseOver(true);
+      uploadSerialListMenu.close();
       refresh.setColorForeground(color(yellow_color));
       uploadFile.setColorForeground(color(highlight_color));
       burnFirmware.setColorForeground(color(yellow_color));
@@ -331,11 +436,11 @@ void keyPressed() {
       refreshPorts();
       break;
     case 1:
-      if (serialListMenu.isOpen()) {
-        serialListMenu.close();
+      if (uploadSerialListMenu.isOpen()) {
+        uploadSerialListMenu.close();
         println("\nSELECTED PORT:\t", uploadPortName);
       } else {
-        serialListMenu.open();
+        uploadSerialListMenu.open();
       }
       break;
     case 2:
@@ -348,23 +453,23 @@ void keyPressed() {
   }
 
   if (key == CODED) {
-    if (serialListMenu.isOpen() == false) {
+    if (uploadSerialListMenu.isOpen() == false) {
       return;
     }
-    serialListMenu.setValue(serialMenuItemId).update();
+    uploadSerialListMenu.setValue(serialMenuItemId).update();
     if (keyCode == UP) {
       //println("go up serial list");
       // TBD
       serialMenuItemId--;
       if (serialMenuItemId < 0) {
-        serialMenuItemId = serialListMenu.getItems().size()-1;
+        serialMenuItemId = uploadSerialListMenu.getItems().size()-1;
       }
     }
     if (keyCode == DOWN) {
       //println("go down serial list");
       // TBD
       serialMenuItemId++;
-      if (serialMenuItemId > serialListMenu.getItems().size()-1) {
+      if (serialMenuItemId > uploadSerialListMenu.getItems().size()-1) {
         serialMenuItemId = 0;
       }
     }
@@ -393,7 +498,53 @@ void keyPressed() {
       myTextarea.showScrollbar();
     }
   }
+
+
+  if (key == 'd' || key == 'D') {
+    //open extra panel with debug port
+    showDebugMenu = !showDebugMenu;
+
+    if (showDebugMenu) {
+      debugSerialListMenu.show();
+      debugPortLabel.show();
+
+      println("");
+      println("DEBUG CONTROL is now in view.");
+
+      if (debugPortName == null) {
+        enableDebugPortOpening = false;
+        println("Currently DEBUG PORT is null.");
+        println("Please select a valid DEBUG PORT and it will be");
+      }else if (debugPortName == uploadPortName) {
+        enableDebugPortOpening = false;
+        println("Selected DEBUG PORT:\t", debugPortName, "\t is same as UPLOAD PORT");
+        println("Please change and then it will be enabled!");
+      }else if (debugPortName == "DEBUG_PORT") {
+        enableDebugPortOpening = false;
+        println("Debug port will be enabled on debug port selection.");
+      }else{
+        enableDebugPortOpening = true;
+        println("Selected DEBUG PORT:\t", debugPortName, "\tis now enabled!");
+      }
+
+      println("");
+      println("If you do not want to enable debug,");
+      println("just press [d] in the keyboard to disable/hide.");
+    } else {
+      enableDebugPortOpening = false;
+
+      debugSerialListMenu.hide();
+      debugPortLabel.hide();
+
+      println("");
+      println("DEBUG CONTROL is now hidden.");
+      println("DEBUG PORT will be disabled.");
+    }
+  }
 }
+
+
+boolean showDebugMenu = false;
 
 void mousePressed() {
   //UIElementNumber = 0;

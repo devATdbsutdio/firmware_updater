@@ -3,7 +3,7 @@ import processing.serial.*;
 Serial uploadPort;
 
 boolean enableFlashing = false;
-
+boolean enableDebugPortOpening = false;
 
 StringList getSerialPortsInLinux() {
   StringList serialPortsList = new StringList();

@@ -35,9 +35,11 @@ void setup() {
   //printFlashCommand(flash_cmd);
 
   createRefreshSerialPortsButton();
-  createSerialPortsMenu(fontR11);
+  createDebugPortsMenu(fontR11);
+  createUploadPortsMenu(fontR11);
   createUploadFileButton();
   createBinFileNameDisplay(fontR14);
+  
 
   // ------------------------------------------------------------------------//
   // If we have used the software before and loaded a binary file,

@@ -6,7 +6,8 @@ String progFilePath = "PROG.PY_PATH";
 String binHexFilePath = "BIN_PATH";
 String binHexFileName = "binary file [xxx.hex]";
 // To be used later by UI, after selecting a port, this will be inserted in upload command
-String uploadPortName = "SERIAL_PORT";
+String uploadPortName = "UPLOAD_PORT";
+String debugPortName = "DEBUG_PORT";
 
 char[] splChars = {' ', '*', '\\', '/'}; // special characters in file anmes to look out for
 
