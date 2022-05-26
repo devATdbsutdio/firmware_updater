@@ -8,7 +8,7 @@ UI elements:
  6. [TBD][Toggle] upload loop.
  7. [TBD][Button] get latest firmware.
  8. [*] Test Exported APP on Mac OS.
- 9. [*] Test Exported APP and adjust on Windows. 
+ 9. [*] Test Exported APP and adjust on Windows.
  10.[TBD] Test Exported APP on Linux.
  11.[TBD] Button to fold/hide and unFold/show Console
  12.[BUG] icon lock doesn't work
@@ -77,19 +77,24 @@ void createRefreshSerialPortsButton() {
 
 void createSerialPortsMenu(ControlFont f) {
   // Create an StringList of all the Serial ports available
-  
-  // [TBD] for Linux
-  if(OS() == 1){
-    exit();
-  }
-  
   StringList serialPortsList = new StringList();
-  for (int i=0; i<Serial.list().length; i++ ) {
-    serialPortsList.append(Serial.list()[i]);
+
+  // For Linux -> **Spl method due to bug for which Serial.list() doesn't work in linux
+  if (OS() == 1) {
+    // command to grab list serial ports in bash
+    String[] cmd = {"bash", "-c", "ls /dev/tty.*"};
+    //printArray(get_serial_ports_in_linux(cmd));
+    serialPortsList = getSerialPortsInLinux(cmd);
+  }
+  // For mac and win
+  if (OS() == 0 || OS() == 2) {
+    for (int i=0; i<Serial.list().length; i++ ) {
+      serialPortsList.append(Serial.list()[i]);
+    }
   }
 
   String[] workablePortsArray = filterSerialList(serialPortsList);
-  
+
   // Get position related to refresh icon
   float[] position = {
     refresh.getPosition()[0]+refresh.getWidth()+buffGapWidth,
@@ -169,14 +174,25 @@ void refreshPorts() {
   println("\nREFRESHING SERIAL PORTS...");
   // Create an StringList of all the Serial ports available
   StringList serialPortsList = new StringList();
-  for (int i=0; i<Serial.list().length; i++ ) {
-    serialPortsList.append(Serial.list()[i]);
+
+  // For Linux -> **Spl method due to bug for which Serial.list() doesn't work in linux
+  if (OS() == 1) {
+    // command to grab list serial ports in bash
+    String[] cmd = {"bash", "-c", "ls /dev/tty.*"};
+    //printArray(get_serial_ports_in_linux(cmd));
+    serialPortsList = getSerialPortsInLinux(cmd);
+  }
+  // For mac and win
+  if (OS() == 0 || OS() == 2) {
+    for (int i=0; i<Serial.list().length; i++ ) {
+      serialPortsList.append(Serial.list()[i]);
+    }
   }
 
   String[] workablePortsArray = filterSerialList(serialPortsList);
   printArray(workablePortsArray);
 
-   // Update the list
+  // Update the list
   serialListMenu.setItems(workablePortsArray).update();
 }
 

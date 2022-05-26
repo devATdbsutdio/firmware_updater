@@ -4,6 +4,35 @@ Serial uploadPort;
 
 boolean enableFlashing = false;
 
+
+StringList getSerialPortsInLinux(String[] _cmd) {
+  StringList serialPortsList = new StringList();
+  try {
+    //String[] get_ports_cmd = {"ls", "/dev/tty*"};
+    Process p = Runtime.getRuntime().exec(_cmd);
+    // 2. Create a buffer reader to capture input stream. (Note: we are not capturing error stream
+    // but it can be done)
+    BufferedReader buff = new BufferedReader(new InputStreamReader(p.getInputStream()));
+    String stdIn = null;
+    // 3. Read a line and if it's not null, print it.
+    while ((stdIn = buff.readLine()) != null) {
+      //println(stdIn.toString());
+      serialPortsList.append(stdIn.toString());
+    }
+    // 4. Check the exit code to be 100% sure, the command ran successfully (exitCode 0)
+    int exitVal = p.waitFor();
+    println("Serial Ports list command's EXIT CODE:\t", str(exitVal));
+    buff.close();
+  }
+  catch (Exception e) {
+    //println("Running Serial Ports list command had exceptions");
+    serialPortsList = null;
+  }
+  return serialPortsList;
+}
+
+
+
 String[] filterSerialList(StringList allSerialPorts) {
   StringList filteredPorts = new StringList();
 
