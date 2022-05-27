@@ -50,16 +50,18 @@ int objHeights = 25;
 int consoleYPos = 128;
 int listItemHeight = 100;
 int listItemWidth = 220;
+int gapTopFromFrame = 35;
 
 
 void setupOnScreenConsosle(ControlFont f) {
   myTextarea = cp5.addTextarea("txt")
-    .setPosition(buffGapWidth, consoleYPos)
-    .setSize(width - buffGapWidth*2, height-(consoleYPos+buffGapWidth))
+    .setPosition(buffGapWidth + widthOfKeyBoardGuideFrame+12, consoleYPos+gapTopFromFrame)
+    .setSize((width - buffGapWidth*2)-(widthOfKeyBoardGuideFrame+12), (height-(consoleYPos+buffGapWidth))-gapTopFromFrame)
     .setFont(f)
     .setLineHeight(13)
     .setColor(color(80, 90, 90))
-    .setColorBackground(color(#1D1F21))
+    //.setColorBackground(color(#1D1F21))
+    .setColorBackground(color(15))
     .setColorForeground(color(#F0C674))
     .enableCollapse()
     ;
@@ -476,30 +478,6 @@ void keyPressed() {
   }
 
 
-  if (key == 'h' || key == 'H') {
-    collapse = !collapse;
-
-    if (collapse) {
-      surface.setResizable(true);
-      surface.setSize(630, 128);
-      surface.setResizable(false);
-
-      myTextarea.setPosition(buffGapWidth, consoleYPos + 50);
-      myTextarea.setHeight(2);
-      myTextarea.hideScrollbar();
-    } else {
-
-      surface.setResizable(true);
-      surface.setSize(630, 320);
-      surface.setResizable(false);
-
-      myTextarea.setPosition(buffGapWidth, consoleYPos);
-      myTextarea.setHeight(height-(consoleYPos+buffGapWidth));
-      myTextarea.showScrollbar();
-    }
-  }
-
-
   if (key == 'd' || key == 'D') {
     //open extra panel with debug port
     showDebugMenu = !showDebugMenu;
@@ -515,14 +493,14 @@ void keyPressed() {
         enableDebugPortOpening = false;
         println("Currently DEBUG PORT is null.");
         println("Please select a valid DEBUG PORT and it will be");
-      }else if (debugPortName == uploadPortName) {
+      } else if (debugPortName == uploadPortName) {
         enableDebugPortOpening = false;
         println("Selected DEBUG PORT:\t", debugPortName, "\t is same as UPLOAD PORT");
         println("Please change and then it will be enabled!");
-      }else if (debugPortName == "DEBUG_PORT") {
+      } else if (debugPortName == "DEBUG_PORT") {
         enableDebugPortOpening = false;
         println("Debug port will be enabled on debug port selection.");
-      }else{
+      } else {
         enableDebugPortOpening = true;
         println("Selected DEBUG PORT:\t", debugPortName, "\tis now enabled!");
       }
@@ -551,4 +529,105 @@ void mousePressed() {
   refresh.setColorForeground(color(yellow_color));
   uploadFile.setColorForeground(color(yellow_color));
   burnFirmware.setColorForeground(color(yellow_color));
+}
+
+
+// -- UI keyboard shortcut guide -- //
+int textSize = 12;
+int textVerticalGap = 6;
+int totalKeyShortcuts = 7;
+String[] keyInfo = {
+  "[ESC]",
+  "[TAB]",
+  "[RETURN]",
+  "[CLICK]",
+  "[r/R]",
+  "[f/F]",
+  "[d/D]"
+};
+String[] keyAction = {
+  "QUIT",
+  "CYCLE  UI",
+  "SELECT / SET",
+  "EXIT  TABBING",
+  "REFRESH  PORTS",
+  "FLASH  BINARY",
+  "TOGGLE  DEBUG"
+};
+String textSeparator = ":";
+
+int widthOfKeyBoardGuideFrame = 144;
+float frameStrokeWeight = 0.5;
+
+void showKeyBoardGuide(int x, int y) {
+  // Bounding box for keyboard shortcut text
+  noFill();
+  stroke(washed_text_color);
+  strokeWeight(frameStrokeWeight);
+  pushMatrix();
+  translate(x-5, y);
+  rectMode(CORNER);
+  rect(0, 0, buffGapWidth + widthOfKeyBoardGuideFrame, height-(consoleYPos+buffGapWidth));
+  popMatrix();
+
+  // Header for keyBoard Guide frame
+  noStroke();
+  fill(washed_text_color);
+  pushMatrix();
+  translate(x-5, y);
+  rectMode(CORNER);
+  rect(0, 0, buffGapWidth + widthOfKeyBoardGuideFrame + frameStrokeWeight, gapTopFromFrame-8);
+  textAlign(LEFT, CENTER);
+  fill(50);
+  text("SHORTCUTS", 5, 12);
+  popMatrix();
+
+  textSize(textSize);
+  fill(washed_text_color);
+
+  pushMatrix();
+  translate(x-2, y+gapTopFromFrame);
+  textAlign(LEFT, TOP);
+  for (int id=0; id<totalKeyShortcuts; id++) {
+    text(keyInfo[id], 0, (textSize+textVerticalGap)*id);
+  }
+  popMatrix();
+
+  pushMatrix();
+  translate((x+52.5)-2, y+gapTopFromFrame);
+  textAlign(LEFT, TOP);
+  for (int id=0; id<totalKeyShortcuts; id++) {
+    text(textSeparator, 0, (textSize+textVerticalGap)*id);
+  }
+  popMatrix();
+
+  pushMatrix();
+  translate((x+60)-2, y+gapTopFromFrame);
+  textAlign(LEFT, TOP);
+  for (int id=0; id<totalKeyShortcuts; id++) {
+    text(keyAction[id], 0, (textSize+textVerticalGap)*id);
+  }
+  popMatrix();
+
+  // Bounding box for console
+  noFill();
+  stroke(washed_text_color);
+  strokeWeight(frameStrokeWeight);
+  pushMatrix();
+  translate(buffGapWidth + widthOfKeyBoardGuideFrame+10, y);
+  rectMode(CORNER);
+  rect(0, 0, (width - buffGapWidth*2)-150, height-(consoleYPos+buffGapWidth));
+  popMatrix();
+
+  // Header for console frame
+  noStroke();
+  fill(washed_text_color);
+  pushMatrix();
+  translate(buffGapWidth + widthOfKeyBoardGuideFrame+10, y);
+  rectMode(CORNER);
+  rect(0, 0, (width - buffGapWidth*2)-(150-1), gapTopFromFrame-8);
+  textAlign(LEFT, CENTER);
+  fill(50);
+  text("CONSOLE", 5, 12);
+  popMatrix();
 }

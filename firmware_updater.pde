@@ -1,3 +1,5 @@
+PFont viewFont;
+
 void setup() {
   size(630, 320);
   background(25);
@@ -39,7 +41,7 @@ void setup() {
   createUploadPortsMenu(fontR11);
   createUploadFileButton();
   createBinFileNameDisplay(fontR14);
-  
+
 
   // ------------------------------------------------------------------------//
   // If we have used the software before and loaded a binary file,
@@ -48,9 +50,15 @@ void setup() {
   loadAndSetBinaryFilePath(binPathInfoFile);
 
   createUploadFirmwareButton();
+
+  //viewFont = loadFont("ABCDiatype-Light-14.vlw");
+  //textFont(viewFont, 14);
+  smooth();
 }
+
 
 
 void draw() {
   background(15);
+  showKeyBoardGuide(buffGapWidth, consoleYPos);
 }
