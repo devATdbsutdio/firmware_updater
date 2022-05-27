@@ -62,4 +62,6 @@ void setup() {
 void draw() {
   background(15);
   showKeyBoardGuide(buffGapWidth, consoleYPos);
+
+  // if debug port name is not the starting name is not null and is not same as upload port and
 }

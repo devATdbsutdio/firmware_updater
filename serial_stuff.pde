@@ -1,6 +1,7 @@
 import java.io.InputStreamReader;
 import processing.serial.*;
-Serial uploadPort;
+Serial serialReadPort;
+int serialReadBaud = 115200;
 
 boolean enableFlashing = false;
 boolean enableDebugPortRead = false;
@@ -154,4 +155,63 @@ void run_cmd() {
 
   // After the command has ran, Release the UI
   unlockUIElements();
+}
+
+
+
+boolean closeSerialPort() {
+  boolean portClosed = false;
+  if (serialReadPort != null) {
+    println("SERIAL DEBUG PORT WAS FOUND OPEN. CLOSING ...");
+    serialReadPort.clear();
+    try {
+      serialReadPort.dispose();
+      serialReadPort.stop();
+      serialReadPort = null;
+      if (serialReadPort == null) {
+        portClosed = true;
+      } else {
+        portClosed = false;
+        //println("For some reason Serial port is not null. So not closing...");
+      }
+    }
+    catch(Exception e) {
+      //println("Exception closing Serial port");
+      portClosed = false;
+    }
+  } else {
+    //println("Serial port is null, so not closing");
+    portClosed = false;
+  }
+  return portClosed;
+}
+
+
+boolean openSerialPort(String portName, int baudRate) {
+  boolean portOpened = false;
+  if (serialReadPort == null) {
+    if (!portName.equals("DEBUG_PORT")) {
+      try {
+        println("A VALID SERIAL DEBUG PORT WAS FOUND. OPENING ...");
+        serialReadPort = new Serial(this, portName, baudRate);
+        if (serialReadPort != null) {
+          portOpened = true;
+        } else {
+          portOpened = false;
+          //println("For some reason, Serial port is still null, so not opening!");
+        }
+      }
+      catch(Exception e) {
+        portOpened = false;
+        //println("Exception opening Serial port");
+      }
+    } else {
+      //println("Serail port name is", "DEBUG_PORT", ". So not attempting to open");
+      portOpened = false;
+    }
+  } else {
+    //println("Serial port in not null, so not opening");
+    portOpened = false;
+  }
+  return portOpened;
 }
