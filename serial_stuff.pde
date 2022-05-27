@@ -3,7 +3,7 @@ import processing.serial.*;
 Serial uploadPort;
 
 boolean enableFlashing = false;
-boolean enableDebugPortOpening = false;
+boolean enableDebugPortRead = false;
 
 StringList getSerialPortsInLinux() {
   StringList serialPortsList = new StringList();
@@ -132,6 +132,9 @@ void run_cmd() {
 
     if (exitVal == 0) {
       println("\n --- SUCCESFULLY FLASHED FIRMWARE: " + binHexFileName + "  ---");
+      //
+      // [TBD] At this stage open serial port: ... & read data...
+      // if (enableDebugPortRead)
     } else {
       println("\n --- ERROR WHILE FLASHING FIRMWARE: " + binHexFileName + " ---");
     }

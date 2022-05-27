@@ -38,6 +38,7 @@ void setup() {
 
   createRefreshSerialPortsButton();
   createDebugPortsMenu(fontR11);
+  createToggleDebugSwitch(fontR11);
   createUploadPortsMenu(fontR11);
   createUploadFileButton();
   createBinFileNameDisplay(fontR14);

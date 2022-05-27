@@ -8,9 +8,11 @@ UI elements:
  7. [*] Test Exported APP on Mac OS.
  8. [*] Test Exported APP and adjust on Windows.
  9. [TBD] Test Exported APP on Linux. (yaml lib used by prog.py not working asked developer)
- 10.[MAYBE] Button to fold/hide and unFold/show Console.
- 11.[*] Icon lock/unlock bug resolve.
- 12.[TBD] key board shortcut to show debugg port controls
+ 10.[*] Icon lock/unlock bug resolve.
+ 11.[*] key board shortcut to show debugg port controls
+ 12.[*] Debug port ui (port menu + switch)show hide
+ 13.[*] Debug port ui (switch) enable disable logic
+ 14.[TBD] Open serial port and read result post testfirmware upload. 
  */
 
 
@@ -24,8 +26,8 @@ int highlight_color = #8EB559;
 int refresh_ico = #00f021;
 int file_ico = #00f15b;
 int upload_ico = #00f061;
-//int toggle_on_ico = #00f205;
-//int toggle_off_ico = #00f204;
+int toggle_on_ico = #00f205;
+int toggle_off_ico = #00f204;
 
 
 import controlP5.*;
@@ -42,7 +44,8 @@ Textlabel debugPortLabel;
 Icon uploadFile;
 Textarea binFileLabel;
 Icon burnFirmware;
-Textlabel burn;
+Icon ToogleDebugSerial;
+Textlabel debugSwitchLabel;
 
 
 int buffGapWidth = 10;
@@ -199,6 +202,61 @@ void createDebugPortsMenu(ControlFont f) {
 
 
 
+
+void createToggleDebugSwitch(ControlFont f) {
+  // Get position related to debug port list menu
+  float[] position = {
+    debugSerialListMenu.getPosition()[0] + (debugSerialListMenu.getWidth()+buffGapWidth*2)+5,
+    debugSerialListMenu.getPosition()[1]
+  };
+
+  ToogleDebugSerial = cp5.addIcon("debugPortSwitch", objHeights)
+    .setPosition(position[0], position[1])
+    .setSize(objHeights, objHeights)
+    .setRoundedCorners(20)
+    .setFont(createFont("fontawesome-webfont.ttf", objHeights*1.25))
+    .setFontIcons(toggle_on_ico, toggle_off_ico)
+    .setSwitch(true)
+    .setColorBackground(color(255, 100))
+    // onLoad it is default set to off
+    .hide()
+    ;
+
+
+  createDebugSwitchLabel(f);
+}
+
+
+void createDebugSwitchLabel(ControlFont f) {
+  // Get position related to refresh icon
+  float[] position = {
+    ToogleDebugSerial.getPosition()[0]+ToogleDebugSerial.getWidth()+buffGapWidth,
+    ToogleDebugSerial.getPosition()[1] + 7
+  };
+
+  debugSwitchLabel = cp5.addTextlabel("DEBUG PORT SWITCH")
+    .setPosition(position[0], position[1])
+    .setColorValue(100)
+    .setFont(f)
+    .setText("CLOSED")
+    .hide()
+    ;
+}
+
+
+void debugPortSwitch(boolean on) {
+  println("SERIAL DEBUG PORT OPENED:\t", on);
+  if (on) {
+    debugSwitchLabel.setText("OPENED");
+    enableDebugPortRead = true;
+  } else {
+    debugSwitchLabel.setText("CLOSED");
+    enableDebugPortRead = true;
+  }
+}
+
+
+
 void createUploadFileButton() {
   // Get position related to refresh icon
   float[] position = {
@@ -298,14 +356,16 @@ void debugPort(int n) {
   if (debugSerialListMenu.isMouseOver()) {
     debugSerialListMenu.close();
     if (!debugPortName.equals(uploadPortName)) {
-      enableDebugPortOpening = true;
+      ToogleDebugSerial.setOn();
+      enableDebugPortRead = true;
       // unique debug port has been selected
       println("\nSELECTED DEBUG PORT:\t", debugPortName);
     } else {
-      enableDebugPortOpening = false;
+      ToogleDebugSerial.setOff();
+      enableDebugPortRead = false;
       // warn user that it is same as upload port
-      println("\nSELECTED DEBUG PORT:\t", debugPortName, "\t IS SAME AS UPLOAD PORT");
-      println("PLEASSE CHANGE!");
+      println("Selected DEBUG PORT:\t", debugPortName, "\t is same as UPLOAD PORT");
+      println("Please change and then it will be enabled!");
       println("");
     }
   }
@@ -485,34 +545,46 @@ void keyPressed() {
     if (showDebugMenu) {
       debugSerialListMenu.show();
       debugPortLabel.show();
+      ToogleDebugSerial.show();
+      debugSwitchLabel.show();
 
       println("");
       println("DEBUG CONTROL is now in view.");
 
       if (debugPortName == null) {
-        enableDebugPortOpening = false;
+        ToogleDebugSerial.setOff();
+        enableDebugPortRead = false;
+        println("");
         println("Currently DEBUG PORT is null.");
-        println("Please select a valid DEBUG PORT and it will be");
+        println("Please select a valid DEBUG PORT and it will be Enabled!");
       } else if (debugPortName == uploadPortName) {
-        enableDebugPortOpening = false;
+        ToogleDebugSerial.setOff();
+        enableDebugPortRead = false;
+        println("");
         println("Selected DEBUG PORT:\t", debugPortName, "\t is same as UPLOAD PORT");
         println("Please change and then it will be enabled!");
       } else if (debugPortName == "DEBUG_PORT") {
-        enableDebugPortOpening = false;
+        ToogleDebugSerial.setOff();
+        enableDebugPortRead = false;
+        println("");
         println("Debug port will be enabled on debug port selection.");
       } else {
-        enableDebugPortOpening = true;
+        ToogleDebugSerial.setOn();
+        enableDebugPortRead = true;
+        println("");
         println("Selected DEBUG PORT:\t", debugPortName, "\tis now enabled!");
       }
-
       println("");
-      println("If you do not want to enable debug,");
-      println("just press [d] in the keyboard to disable/hide.");
+      println("If you want to hide this debug section,");
+      println("just press [d] in the keyboard to disable Debug port & hide this section.");
     } else {
-      enableDebugPortOpening = false;
+      ToogleDebugSerial.setOff();
+      enableDebugPortRead = false;
 
       debugSerialListMenu.hide();
       debugPortLabel.hide();
+      ToogleDebugSerial.hide();
+      debugSwitchLabel.hide();
 
       println("");
       println("DEBUG CONTROL is now hidden.");
