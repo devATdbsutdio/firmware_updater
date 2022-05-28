@@ -345,8 +345,7 @@ void uploadPort(int n) {
     // disable switch
     ToogleDebugSerial.setOff();
     //enableDebugPortRead = false;
-    println("");
-    println("Selected UPLOAD PORT:\t", uploadPortName, "\t is same as DEBUG PORT");
+    println("\nSelected UPLOAD PORT:\t", uploadPortName, "\t is same as DEBUG PORT");
     println("Please change them to unique and then debug port will be enabled!");
   }
   if (!uploadPortName.equals(debugPortName) && ToogleDebugSerial.getBooleanValue() == false) {
@@ -373,8 +372,7 @@ void debugPort(int n) {
     // disable switch
     ToogleDebugSerial.setOff();
     //enableDebugPortRead = false;
-    println("");
-    println("Selected DEBUG PORT:\t", debugPortName, "\t is same as UPLOAD PORT");
+    println("\nSelected DEBUG PORT:\t", debugPortName, "\t is same as UPLOAD PORT");
     println("Please change them to unique and then debug port will be enabled!");
   }
   if (!debugPortName.equals(uploadPortName) && ToogleDebugSerial.getBooleanValue() == false) {
@@ -395,8 +393,7 @@ void debugPortSwitch(boolean on) {
       debugSwitchLabel.setText("CLOSED");
       enableDebugPortRead = false;
 
-      println("");
-      println("Selected DEBUG PORT and UPLOAD PORT is same");
+      println("\nSelected DEBUG PORT and UPLOAD PORT is same");
       println("Please change them to unique and then debug port will be enabled!");
 
       // if serial was setup, try to flush and close
@@ -605,55 +602,48 @@ void keyPressed() {
   if (key == 'd' || key == 'D') {
     //open extra panel with debug port
     showDebugMenu = !showDebugMenu;
-    println("d pressed");
 
     if (showDebugMenu) {
-      //  debugSerialListMenu.show();
-      //  debugPortLabel.show();
-      //  ToogleDebugSerial.show();
-      //  debugSwitchLabel.show();
+        debugSerialListMenu.show();
+        debugPortLabel.show();
+        ToogleDebugSerial.show();
+        debugSwitchLabel.show();
 
-      //  println("");
-      //  println("DEBUG CONTROL is now in view.");
+        println("\nDEBUG CONTROL is now in view.");
 
-      //  if (debugPortName == null) {
-      //    ToogleDebugSerial.setOff();
-      //    //enableDebugPortRead = false;
-      //    println("");
-      //    println("Currently DEBUG PORT is null.");
-      //    println("Please select a valid DEBUG PORT and it will be Enabled!");
-      //  } else if (debugPortName == uploadPortName) {
-      //    ToogleDebugSerial.setOff();
-      //    //enableDebugPortRead = false;
-      //    println("");
-      //    println("Selected DEBUG PORT:\t", debugPortName, "\t is same as UPLOAD PORT");
-      //    println("Please change and then it will be enabled!");
-      //  } else if (debugPortName == "DEBUG_PORT") {
-      //    ToogleDebugSerial.setOff();
-      //    //enableDebugPortRead = false;
-      //    println("");
-      //    println("Debug port will be enabled on debug port selection.");
-      //  } else {
-      //    ToogleDebugSerial.setOn();
-      //    //enableDebugPortRead = true;
-      //    println("");
-      //    println("Selected DEBUG PORT:\t", debugPortName);
-      //  }
-      //  println("");
-      //  println("If you want to hide this debug section,");
-      //  println("just press [d] in the keyboard to disable Debug port & hide this section.");
+        if (debugPortName == null) {
+          ToogleDebugSerial.setOff();
+          //enableDebugPortRead = false;
+          println("\nCurrently DEBUG PORT is null.");
+          println("Please select a valid DEBUG PORT and it will be Enabled!");
+        } else if (debugPortName == uploadPortName) {
+          ToogleDebugSerial.setOff();
+          //enableDebugPortRead = false;
+          println("\nSelected DEBUG PORT:\t", debugPortName, "\t is same as UPLOAD PORT");
+          println("Please change and then it will be enabled!");
+        } else if (debugPortName == "DEBUG_PORT") {
+          ToogleDebugSerial.setOff();
+          //enableDebugPortRead = false;
+          println("\nDebug port will be enabled on debug port selection.");
+        } else {
+          ToogleDebugSerial.setOn();
+          //enableDebugPortRead = true;
+          println("\nSelected DEBUG PORT:\t", debugPortName);
+        }
+
+        println("\nIf you want to hide this debug section,");
+        println("just press [d] in the keyboard to disable Debug port & hide this section.");
     } else {
-      //  ToogleDebugSerial.setOff();
-      //  //enableDebugPortRead = false;
+        ToogleDebugSerial.setOff();
+        //enableDebugPortRead = false;
 
-      //  debugSerialListMenu.hide();
-      //  debugPortLabel.hide();
-      //  ToogleDebugSerial.hide();
-      //  debugSwitchLabel.hide();
+        debugSerialListMenu.hide();
+        debugPortLabel.hide();
+        ToogleDebugSerial.hide();
+        debugSwitchLabel.hide();
 
-      //  println("");
-      //  println("DEBUG CONTROL is now hidden.");
-      //  println("DEBUG PORT will be disabled.");
+        println("\nDEBUG CONTROL is now hidden.");
+        println("DEBUG PORT will be disabled.");
     }
   }
 }
