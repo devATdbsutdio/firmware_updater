@@ -6,31 +6,31 @@ int serialReadBaud = 115200;
 boolean enableFlashing = false;
 boolean enableDebugPortRead = false;
 
-StringList getSerialPortsInLinux() {
-  StringList serialPortsList = new StringList();
-  String[] get_ports_cmd = {"bash", "-c", "ls /dev/tty*"};
-  try {
-    Process p = Runtime.getRuntime().exec(get_ports_cmd);
-    // 2. Create a buffer reader to capture input stream. (Note: we are not capturing error stream
-    // but it can be done)
-    BufferedReader buff = new BufferedReader(new InputStreamReader(p.getInputStream()));
-    String stdIn = null;
-    // 3. Read a line and if it's not null, print it.
-    while ((stdIn = buff.readLine()) != null) {
-      //println(stdIn.toString());
-      serialPortsList.append(stdIn.toString());
-    }
-    // 4. Check the exit code to be 100% sure, the command ran successfully (exitCode 0)
-    int exitVal = p.waitFor();
-    println("Serial Ports list command's EXIT CODE:\t", str(exitVal));
-    buff.close();
-  }
-  catch (Exception e) {
-    //println("Running Serial Ports list command had exceptions");
-    serialPortsList = null;
-  }
-  return serialPortsList;
-}
+//StringList getSerialPortsInLinux() {
+//  StringList serialPortsList = new StringList();
+//  String[] get_ports_cmd = {"bash", "-c", "ls /dev/tty*"};
+//  try {
+//    Process p = Runtime.getRuntime().exec(get_ports_cmd);
+//    // 2. Create a buffer reader to capture input stream. (Note: we are not capturing error stream
+//    // but it can be done)
+//    BufferedReader buff = new BufferedReader(new InputStreamReader(p.getInputStream()));
+//    String stdIn = null;
+//    // 3. Read a line and if it's not null, print it.
+//    while ((stdIn = buff.readLine()) != null) {
+//      //println(stdIn.toString());
+//      serialPortsList.append(stdIn.toString());
+//    }
+//    // 4. Check the exit code to be 100% sure, the command ran successfully (exitCode 0)
+//    int exitVal = p.waitFor();
+//    println("Serial Ports list command's EXIT CODE:\t", str(exitVal));
+//    buff.close();
+//  }
+//  catch (Exception e) {
+//    //println("Running Serial Ports list command had exceptions");
+//    serialPortsList = null;
+//  }
+//  return serialPortsList;
+//}
 
 
 
@@ -52,10 +52,12 @@ String[] filterSerialList(StringList allSerialPorts) {
   if (OS() == 1) {
     // linux
     for (String port : allSerialPorts) {
-      // subtring pattern: /dev/tty.USB... or /dev/ttyAMA... (avoid tty0-xx and ttys0-xx)
-      if (port.substring(5, 12).equals("ttyUSB") || port.substring(5, 12).equals("ttyAMA")) {
-        //println(port);
-        filteredPorts.append(port);
+      // subtring pattern: /dev/ttyUSB... or /dev/ttyAMA... (avoid tty0-xx and ttys0-xx)
+      if (port.length() >= 11) {
+        if (port.substring(5, 11).equals("ttyUSB") || port.substring(5, 11).equals("ttyAMA")) {
+          //println(port);
+          filteredPorts.append(port);
+        }
       }
     }
   }
@@ -228,16 +230,19 @@ boolean openSerialPort(String portName, int baudRate) {
 
 StringList currPorts() {
   StringList serialPortsList = new StringList();
-  // For Linux -> **Spl method due to bug for which Serial.list() doesn't work in linux
-  if (OS() == 1) {
-    //printArray(get_serial_ports_in_linux());
-    serialPortsList = getSerialPortsInLinux();
-  }
-  // For mac and win
-  if (OS() == 0 || OS() == 2) {
-    for (int i=0; i<Serial.list().length; i++ ) {
-      serialPortsList.append(Serial.list()[i]);
-    }
+  //// For Linux -> **Spl method due to bug for which Serial.list() doesn't work in linux
+  //if (OS() == 1) {
+  //  //printArray(get_serial_ports_in_linux());
+  //  serialPortsList = getSerialPortsInLinux();
+  //}
+  //// For mac and win
+  //if (OS() == 0 || OS() == 2) {
+  //  for (int i=0; i<Serial.list().length; i++ ) {
+  //    serialPortsList.append(Serial.list()[i]);
+  //  }
+  //}
+  for (int i=0; i<Serial.list().length; i++ ) {
+    serialPortsList.append(Serial.list()[i]);
   }
   return serialPortsList;
 }

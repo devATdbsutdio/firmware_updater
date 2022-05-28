@@ -105,16 +105,20 @@ void createUploadPortsMenu(ControlFont f) {
   // Create an StringList of all the Serial ports available
   StringList serialPortsList = new StringList();
 
-  // For Linux -> **Spl method due to bug for which Serial.list() doesn't work in linux
-  if (OS() == 1) {
-    //printArray(get_serial_ports_in_linux());
-    serialPortsList = getSerialPortsInLinux();
-  }
-  // For mac and win
-  if (OS() == 0 || OS() == 2) {
-    for (int i=0; i<Serial.list().length; i++ ) {
-      serialPortsList.append(Serial.list()[i]);
-    }
+  //// For Linux -> **Spl method due to bug for which Serial.list() doesn't work in linux
+  //if (OS() == 1) {
+  //  //printArray(get_serial_ports_in_linux());
+  //  serialPortsList = getSerialPortsInLinux();
+  //}
+  //// For mac and win
+  //if (OS() == 0 || OS() == 2) {
+  //  for (int i=0; i<Serial.list().length; i++ ) {
+  //    serialPortsList.append(Serial.list()[i]);
+  //  }
+  //}
+
+  for (int i=0; i<Serial.list().length; i++ ) {
+    serialPortsList.append(Serial.list()[i]);
   }
 
   String[] workablePortsArray = filterSerialList(serialPortsList);
@@ -166,15 +170,18 @@ void createDebugPortsMenu(ControlFont f) {
   StringList serialPortsList = new StringList();
 
   // For Linux -> **Spl method due to bug for which Serial.list() doesn't work in linux
-  if (OS() == 1) {
-    //printArray(get_serial_ports_in_linux());
-    serialPortsList = getSerialPortsInLinux();
-  }
-  // For mac and win
-  if (OS() == 0 || OS() == 2) {
-    for (int i=0; i<Serial.list().length; i++ ) {
-      serialPortsList.append(Serial.list()[i]);
-    }
+  //if (OS() == 1) {
+  //  //printArray(get_serial_ports_in_linux());
+  //  serialPortsList = getSerialPortsInLinux();
+  //}
+  //// For mac and win
+  //if (OS() == 0 || OS() == 2) {
+  //  for (int i=0; i<Serial.list().length; i++ ) {
+  //    serialPortsList.append(Serial.list()[i]);
+  //  }
+  //}
+  for (int i=0; i<Serial.list().length; i++ ) {
+    serialPortsList.append(Serial.list()[i]);
   }
 
   String[] workablePortsArray = filterSerialList(serialPortsList);
@@ -307,16 +314,19 @@ void refreshPorts() {
   // Create an StringList of all the Serial ports available
   StringList serialPortsList = new StringList();
 
-  // For Linux -> **Spl method due to bug for which Serial.list() doesn't work in linux
-  if (OS() == 1) {
-    //printArray(get_serial_ports_in_linux());
-    serialPortsList = getSerialPortsInLinux();
-  }
-  // For mac and win
-  if (OS() == 0 || OS() == 2) {
-    for (int i=0; i<Serial.list().length; i++ ) {
-      serialPortsList.append(Serial.list()[i]);
-    }
+  //// For Linux -> **Spl method due to bug for which Serial.list() doesn't work in linux
+  //if (OS() == 1) {
+  //  //printArray(get_serial_ports_in_linux());
+  //  serialPortsList = getSerialPortsInLinux();
+  //}
+  //// For mac and win
+  //if (OS() == 0 || OS() == 2) {
+  //  for (int i=0; i<Serial.list().length; i++ ) {
+  //    serialPortsList.append(Serial.list()[i]);
+  //  }
+  //}
+  for (int i=0; i<Serial.list().length; i++ ) {
+    serialPortsList.append(Serial.list()[i]);
   }
 
   String[] workablePortsArray = filterSerialList(serialPortsList);
@@ -604,46 +614,46 @@ void keyPressed() {
     showDebugMenu = !showDebugMenu;
 
     if (showDebugMenu) {
-        debugSerialListMenu.show();
-        debugPortLabel.show();
-        ToogleDebugSerial.show();
-        debugSwitchLabel.show();
+      debugSerialListMenu.show();
+      debugPortLabel.show();
+      ToogleDebugSerial.show();
+      debugSwitchLabel.show();
 
-        println("\nDEBUG CONTROL is now in view.");
+      println("\nDEBUG CONTROL is now in view.");
 
-        if (debugPortName == null) {
-          ToogleDebugSerial.setOff();
-          //enableDebugPortRead = false;
-          println("\nCurrently DEBUG PORT is null.");
-          println("Please select a valid DEBUG PORT and it will be Enabled!");
-        } else if (debugPortName == uploadPortName) {
-          ToogleDebugSerial.setOff();
-          //enableDebugPortRead = false;
-          println("\nSelected DEBUG PORT:\t", debugPortName, "\t is same as UPLOAD PORT");
-          println("Please change and then it will be enabled!");
-        } else if (debugPortName == "DEBUG_PORT") {
-          ToogleDebugSerial.setOff();
-          //enableDebugPortRead = false;
-          println("\nDebug port will be enabled on debug port selection.");
-        } else {
-          ToogleDebugSerial.setOn();
-          //enableDebugPortRead = true;
-          println("\nSelected DEBUG PORT:\t", debugPortName);
-        }
-
-        println("\nIf you want to hide this debug section,");
-        println("just press [d] in the keyboard to disable Debug port & hide this section.");
-    } else {
+      if (debugPortName == null) {
         ToogleDebugSerial.setOff();
         //enableDebugPortRead = false;
+        println("\nCurrently DEBUG PORT is null.");
+        println("Please select a valid DEBUG PORT and it will be Enabled!");
+      } else if (debugPortName == uploadPortName) {
+        ToogleDebugSerial.setOff();
+        //enableDebugPortRead = false;
+        println("\nSelected DEBUG PORT:\t", debugPortName, "\t is same as UPLOAD PORT");
+        println("Please change and then it will be enabled!");
+      } else if (debugPortName == "DEBUG_PORT") {
+        ToogleDebugSerial.setOff();
+        //enableDebugPortRead = false;
+        println("\nDebug port will be enabled on debug port selection.");
+      } else {
+        ToogleDebugSerial.setOn();
+        //enableDebugPortRead = true;
+        println("\nSelected DEBUG PORT:\t", debugPortName);
+      }
 
-        debugSerialListMenu.hide();
-        debugPortLabel.hide();
-        ToogleDebugSerial.hide();
-        debugSwitchLabel.hide();
+      println("\nIf you want to hide this debug section,");
+      println("just press [d] in the keyboard to disable Debug port & hide this section.");
+    } else {
+      ToogleDebugSerial.setOff();
+      //enableDebugPortRead = false;
 
-        println("\nDEBUG CONTROL is now hidden.");
-        println("DEBUG PORT will be disabled.");
+      debugSerialListMenu.hide();
+      debugPortLabel.hide();
+      ToogleDebugSerial.hide();
+      debugSwitchLabel.hide();
+
+      println("\nDEBUG CONTROL is now hidden.");
+      println("DEBUG PORT will be disabled.");
     }
   }
 }
