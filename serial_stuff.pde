@@ -195,6 +195,8 @@ boolean openSerialPort(String portName, int baudRate) {
         println("A VALID SERIAL DEBUG PORT WAS FOUND. OPENING ...");
         serialReadPort = new Serial(this, portName, baudRate);
         if (serialReadPort != null) {
+          serialReadPort.bufferUntil('\n');
+          serialReadPort.clear();
           portOpened = true;
           // Start a thread to watch Serial port, if it was physically still connected
           // Accordingly update the switch.
