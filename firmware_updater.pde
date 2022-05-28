@@ -68,7 +68,7 @@ void draw() {
   if (serialReadPort != null) {
     while (serialReadPort.available() > 0){ 
       serialData = serialReadPort.readString();         // read it and store it in val
-      if (serialData != null) {
+      if (serialData != null && serialData.length() != 0) {
         println(serialData);
       }
     }
