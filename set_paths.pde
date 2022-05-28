@@ -12,32 +12,36 @@ String debugPortName = "DEBUG_PORT";
 char[] splChars = {' ', '*', '\\', '/'}; // special characters in file anmes to look out for
 
 String[] flash_cmd = {
-  pythonPath,
-  "-u",
-  progFilePath,
-  "-t",
-  "uart",
-  "-u",
-  uploadPortName,
-  "-b",
-  "921600",
-  "-d",
-  "attiny1607",
-  "--fuses",
-  "2:0x02",
-  "6:0x00",
-  "8:0x00",
-  "-f",
-  binHexFilePath,
-  "-a",
+  pythonPath, 
+  "-u", 
+  progFilePath, 
+  "-t", 
+  "uart", 
+  "-u", 
+  uploadPortName, 
+  "-b", 
+  "921600", 
+  "-d", 
+  "attiny1607", 
+  "--fuses", 
+  "2:0x02", 
+  "6:0x00", 
+  "8:0x00", 
+  "-f", 
+  binHexFilePath, 
+  "-a", 
   "write"
 };
 
 
 void sysinfo() {
-  println( "SYS INFO :");
+  //println( "SYS INFO :");
   println( "System:\t" + System.getProperty("os.name") + "  " + System.getProperty("os.version") + "  " + System.getProperty("os.arch") );
-  println( "JAVA:\t" + System.getProperty("java.home")  + " rev: " +javaVersionName);
+  //println( "JAVA:\t" + System.getProperty("java.home")  + " rev: " +javaVersionName);
+  println("\nOPERATION STEPS:");
+  println("[1]. Select a port");
+  println("[2]. Select firmware.");
+  println("[3]. Upload.");
 }
 
 
@@ -261,13 +265,13 @@ void loadAndSetBinaryFilePath(String filename) {
     File f = new File(binHexFilePath);
     if (!f.exists()) {
       println("\n[WARNING]"); 
-      println("Previously used file", binHexFileName,"doesn't exist in the path we recorded!");
+      println("Previously used file", binHexFileName, "doesn't exist in the path we recorded!");
       println("Or may be it was renamed.");
       println("Reload the firmware file to flash");
       enableFlashing = false;
       return ;
     }
-    
+
     println("\nPreviously used file exists!");
     println(binHexFilePath);
     binFileLabel.setText(binHexFileName);

@@ -196,6 +196,9 @@ boolean openSerialPort(String portName, int baudRate) {
         serialReadPort = new Serial(this, portName, baudRate);
         if (serialReadPort != null) {
           portOpened = true;
+          // Start a thread to watch Serial port, if it was physically still connected
+          // Accordingly update the switch.
+          thread("watchSerialStatus");
         } else {
           portOpened = false;
           //println("For some reason, Serial port is still null, so not opening!");
@@ -214,4 +217,51 @@ boolean openSerialPort(String portName, int baudRate) {
     portOpened = false;
   }
   return portOpened;
+}
+
+
+
+
+
+
+StringList currPorts() {
+  StringList serialPortsList = new StringList();
+  // For Linux -> **Spl method due to bug for which Serial.list() doesn't work in linux
+  if (OS() == 1) {
+    //printArray(get_serial_ports_in_linux());
+    serialPortsList = getSerialPortsInLinux();
+  }
+  // For mac and win
+  if (OS() == 0 || OS() == 2) {
+    for (int i=0; i<Serial.list().length; i++ ) {
+      serialPortsList.append(Serial.list()[i]);
+    }
+  }
+  return serialPortsList;
+}
+
+boolean portStillAvailable(String portToCheck) {
+  boolean available = false;
+  for (String port : currPorts()) {
+    if (port.equals(portToCheck)) {
+      available = true;
+      break;
+    } else {
+      available = false;
+    }
+  }
+  return available;
+}
+
+void watchSerialStatus() {
+  while (true) {
+    // if serial port was opened in past successfully
+    if (enableDebugPortRead) {
+      // if serial port was physically disconnected
+      if (!(portStillAvailable(debugPortName))) {
+        ToogleDebugSerial.setOff();
+      }
+    }
+    delay(3000);
+  }
 }

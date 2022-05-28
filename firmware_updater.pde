@@ -55,13 +55,24 @@ void setup() {
   //viewFont = loadFont("ABCDiatype-Light-14.vlw");
   //textFont(viewFont, 14);
   smooth();
+  
+  //thread("watchSerialStatus");
 }
 
 
-
+String serialData = "";
 void draw() {
   background(15);
   showKeyBoardGuide(buffGapWidth, consoleYPos);
 
+
   // if debug port name is not the starting name is not null and is not same as upload port and
+  if (serialReadPort != null) {
+    while (serialReadPort.available() > 0){ 
+      serialData = serialReadPort.readString();         // read it and store it in val
+      if (serialData != null) {
+        println(serialData);
+      }
+    }
+  }
 }

@@ -13,7 +13,9 @@ UI elements:
  12.[*] Debug port ui (port menu + switch)show hide.
  13.[*] Debug port ui (switch) enable disable logic.
  14.[TBD] Implement baud selection.
- 14.[TBD] Open serial port and read result post testfirmware upload.
+ 15.[*] Open serial port and read result post test-firmware upload.
+ 16.[*] Implement physical disconnection Handler.
+ 17.[*] Implement clear console feature.
  */
 
 
@@ -508,6 +510,9 @@ int portMenuItemId = 0;
 boolean showDebugMenu = false;
 
 void keyPressed() {
+  if (key == 'c' || key == 'C') {
+    console.clear();
+  }
   if (key == 'r' || key == 'R') {
     refreshPorts();
     ;
@@ -664,9 +669,9 @@ void mousePressed() {
 
 
 // -- UI keyboard shortcut guide -- //
-int textSize = 12;
+int textSize = 11;
 int textVerticalGap = 6;
-int totalKeyShortcuts = 7;
+int totalKeyShortcuts = 8;
 String[] keyInfo = {
   "[ESC]", 
   "[TAB]", 
@@ -674,7 +679,8 @@ String[] keyInfo = {
   "[CLICK]", 
   "[r/R]", 
   "[f/F]", 
-  "[d/D]"
+  "[d/D]", 
+  "[c/C]"
 };
 String[] keyAction = {
   "QUIT", 
@@ -683,7 +689,8 @@ String[] keyAction = {
   "EXIT  TABBING", 
   "REFRESH  PORTS", 
   "FLASH  BINARY", 
-  "TOGGLE  DEBUG"
+  "TOGGLE  DEBUG", 
+  "CLEAR CONSOLE"
 };
 String textSeparator = ":";
 
