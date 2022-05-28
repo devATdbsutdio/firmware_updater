@@ -7,7 +7,7 @@ UI elements:
  5. [*][Button] Upload to HW.
  7. [*] Test Exported APP on Mac OS.
  8. [*] Test Exported APP and adjust on Windows.
- 9. [TBD] Test Exported APP on Linux. (yaml lib used by prog.py not working asked developer)
+ 9. [*] Test Exported APP on Linux. (yaml lib used by prog.py not working asked developer)
  10.[*] Icon lock/unlock bug resolve.
  11.[*] key board shortcut to show debugg port controls.
  12.[*] Debug port ui (port menu + switch)show hide.
@@ -57,6 +57,9 @@ int consoleYPos = 128;
 int listItemHeight = 100;
 int listItemWidth = 220;
 int gapTopFromFrame = 35;
+
+String emptyUploadPortMenuLabel = "Select upload port . . .";
+String emptyDebugPortMenuLabel = "Select debug port . . .";
 
 
 void setupOnScreenConsosle(ControlFont f) {
@@ -146,7 +149,7 @@ void createUploadPortsMenu(ControlFont f) {
     .setSize(listItemWidth, listItemHeight)
     .setBarHeight(objHeights)
     .setFont(f)
-    .setLabel("Select upload port . . .")
+    .setLabel(emptyUploadPortMenuLabel)
     .setColorLabel(washed_text_color)
     .setItemHeight(objHeights)
     .addItems(workablePortsArray)
@@ -222,7 +225,7 @@ void createDebugPortsMenu(ControlFont f) {
     .setSize(listItemWidth, listItemHeight)
     .setBarHeight(objHeights)
     .setFont(f)
-    .setLabel("Select debug port . . .")
+    .setLabel(emptyDebugPortMenuLabel)
     .setColorLabel(washed_text_color)
     .setItemHeight(objHeights)
     .addItems(workablePortsArray)
@@ -370,8 +373,24 @@ void refreshPorts() {
   String[] workablePortsArray = filterSerialList(serialPortsList);
   printArray(workablePortsArray);
 
-  // Update the list
+  // Update the Port Menu lists
   uploadSerialListMenu.setItems(workablePortsArray).update();
+  debugSerialListMenu.setItems(workablePortsArray).update();
+  
+  // if the previous port not is not there, update the header of the menu list
+  if (!(portStillAvailable(uploadPortName))) {
+    uploadSerialListMenu.setLabel(emptyUploadPortMenuLabel);
+    uploadSerialListMenu.close();
+    uploadSerialListMenu.setMouseOver(false);
+    uploadPortName = "UPLOAD_PORT";
+  }
+  if (!(portStillAvailable(debugPortName))) {
+    debugSerialListMenu.setLabel(emptyDebugPortMenuLabel);
+    debugSerialListMenu.close();
+    debugSerialListMenu.setMouseOver(false);
+    debugPortName = "DEBUG_PORT";
+    
+  }
 }
 
 

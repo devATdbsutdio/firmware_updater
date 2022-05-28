@@ -288,6 +288,15 @@ void watchSerialStatus() {
       // if serial port was physically disconnected
       if (!(portStillAvailable(debugPortName))) {
         ToogleDebugSerial.setOff();
+
+        // remove the port from list
+        debugSerialListMenu.removeItem(debugPortName);
+        debugSerialListMenu.update();
+        //d
+        debugSerialListMenu.setLabel(emptyDebugPortMenuLabel);
+        debugSerialListMenu.close();
+        debugSerialListMenu.setMouseOver(false);
+        debugPortName = "DEBUG_PORT";
       }
     }
     delay(3000);
