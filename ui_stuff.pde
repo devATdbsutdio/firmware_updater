@@ -105,18 +105,30 @@ void createUploadPortsMenu(ControlFont f) {
   // Create an StringList of all the Serial ports available
   StringList serialPortsList = new StringList();
 
-  //// For Linux -> **Spl method due to bug for which Serial.list() doesn't work in linux
-  //if (OS() == 1) {
-  //  //printArray(get_serial_ports_in_linux());
-  //  serialPortsList = getSerialPortsInLinux();
-  //}
-  //// For mac and win
-  //if (OS() == 0 || OS() == 2) {
-  //  for (int i=0; i<Serial.list().length; i++ ) {
-  //    serialPortsList.append(Serial.list()[i]);
-  //  }
-  //}
-
+  /*
+   AS OF MAY-2022, if using Processing 4.0b8, the serial library is broken for Linux. 
+   Specifically Serial.list() method doesn't list al; available serial ports in LInux.
+   So you want to use 4.0b8 version of IDE, anyways in Linux, Un comment the below block. 
+   */
+  /*
+  // For Linux -> **Spl method due to bug for which Serial.list() doesn't work in linux
+   if (OS() == 1) {
+   //printArray(get_serial_ports_in_linux());
+   serialPortsList = getSerialPortsInLinux();
+   }
+   // For mac and win
+   if (OS() == 0 || OS() == 2) {
+   for (int i=0; i<Serial.list().length; i++ ) {
+   serialPortsList.append(Serial.list()[i]);
+   }
+   }
+   */
+  /*
+   AS OF MAY-2022, if using Processing 3.5.4, the serial library is working for Linux. 
+   Specifically Serial.list() method correctly lists all available serial ports in Linux.
+   So you want to use 3.5.4 version of IDE, in Linux (Recommened until seril bug is foxed in Ver 4.X), 
+   Comment out this for loop block below
+   */
   for (int i=0; i<Serial.list().length; i++ ) {
     serialPortsList.append(Serial.list()[i]);
   }
@@ -169,17 +181,30 @@ void createDebugPortsMenu(ControlFont f) {
   // Create an StringList of all the Serial ports available
   StringList serialPortsList = new StringList();
 
+  /*
+   AS OF MAY-2022, if using Processing 4.0b8, the serial library is broken for Linux. 
+   Specifically Serial.list() method doesn't list al; available serial ports in LInux.
+   So you want to use 4.0b8 version of IDE, anyways in Linux, Un comment the below block. 
+   */
+  /*
   // For Linux -> **Spl method due to bug for which Serial.list() doesn't work in linux
-  //if (OS() == 1) {
-  //  //printArray(get_serial_ports_in_linux());
-  //  serialPortsList = getSerialPortsInLinux();
-  //}
-  //// For mac and win
-  //if (OS() == 0 || OS() == 2) {
-  //  for (int i=0; i<Serial.list().length; i++ ) {
-  //    serialPortsList.append(Serial.list()[i]);
-  //  }
-  //}
+   if (OS() == 1) {
+   //printArray(get_serial_ports_in_linux());
+   serialPortsList = getSerialPortsInLinux();
+   }
+   // For mac and win
+   if (OS() == 0 || OS() == 2) {
+   for (int i=0; i<Serial.list().length; i++ ) {
+   serialPortsList.append(Serial.list()[i]);
+   }
+   }
+   */
+  /*
+   AS OF MAY-2022, if using Processing 3.5.4, the serial library is working for Linux. 
+   Specifically Serial.list() method correctly lists all available serial ports in Linux.
+   So you want to use 3.5.4 version of IDE, in Linux (Recommened until seril bug is foxed in Ver 4.X), 
+   Comment out this for loop block below
+   */
   for (int i=0; i<Serial.list().length; i++ ) {
     serialPortsList.append(Serial.list()[i]);
   }
@@ -314,17 +339,30 @@ void refreshPorts() {
   // Create an StringList of all the Serial ports available
   StringList serialPortsList = new StringList();
 
-  //// For Linux -> **Spl method due to bug for which Serial.list() doesn't work in linux
-  //if (OS() == 1) {
-  //  //printArray(get_serial_ports_in_linux());
-  //  serialPortsList = getSerialPortsInLinux();
-  //}
-  //// For mac and win
-  //if (OS() == 0 || OS() == 2) {
-  //  for (int i=0; i<Serial.list().length; i++ ) {
-  //    serialPortsList.append(Serial.list()[i]);
-  //  }
-  //}
+  /*
+   AS OF MAY-2022, if using Processing 4.0b8, the serial library is broken for Linux. 
+   Specifically Serial.list() method doesn't list al; available serial ports in LInux.
+   So you want to use 4.0b8 version of IDE, anyways in Linux, Un comment the below block. 
+   */
+  /*
+  // For Linux -> **Spl method due to bug for which Serial.list() doesn't work in linux
+   if (OS() == 1) {
+   //printArray(get_serial_ports_in_linux());
+   serialPortsList = getSerialPortsInLinux();
+   }
+   // For mac and win
+   if (OS() == 0 || OS() == 2) {
+   for (int i=0; i<Serial.list().length; i++ ) {
+   serialPortsList.append(Serial.list()[i]);
+   }
+   }
+   */
+  /*
+   AS OF MAY-2022, if using Processing 3.5.4, the serial library is working for Linux. 
+   Specifically Serial.list() method correctly lists all available serial ports in Linux.
+   So you want to use 3.5.4 version of IDE, in Linux (Recommened until seril bug is foxed in Ver 4.X), 
+   Comment out this for loop block below
+   */
   for (int i=0; i<Serial.list().length; i++ ) {
     serialPortsList.append(Serial.list()[i]);
   }

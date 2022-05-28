@@ -6,31 +6,38 @@ int serialReadBaud = 115200;
 boolean enableFlashing = false;
 boolean enableDebugPortRead = false;
 
-//StringList getSerialPortsInLinux() {
-//  StringList serialPortsList = new StringList();
-//  String[] get_ports_cmd = {"bash", "-c", "ls /dev/tty*"};
-//  try {
-//    Process p = Runtime.getRuntime().exec(get_ports_cmd);
-//    // 2. Create a buffer reader to capture input stream. (Note: we are not capturing error stream
-//    // but it can be done)
-//    BufferedReader buff = new BufferedReader(new InputStreamReader(p.getInputStream()));
-//    String stdIn = null;
-//    // 3. Read a line and if it's not null, print it.
-//    while ((stdIn = buff.readLine()) != null) {
-//      //println(stdIn.toString());
-//      serialPortsList.append(stdIn.toString());
-//    }
-//    // 4. Check the exit code to be 100% sure, the command ran successfully (exitCode 0)
-//    int exitVal = p.waitFor();
-//    println("Serial Ports list command's EXIT CODE:\t", str(exitVal));
-//    buff.close();
-//  }
-//  catch (Exception e) {
-//    //println("Running Serial Ports list command had exceptions");
-//    serialPortsList = null;
-//  }
-//  return serialPortsList;
-//}
+/*
+ AS OF MAY-2022, if using Processing 4.0b8, the serial library is broken for Linux. 
+ Specifically Serial.list() method doesn't list all available serial ports in LInux.
+ So you want to use this version of IDE, anyways in Linux, Un comment the below function block. 
+ */
+/*
+StringList getSerialPortsInLinux() {
+ StringList serialPortsList = new StringList();
+ String[] get_ports_cmd = {"bash", "-c", "ls /dev/tty*"};
+ try {
+ Process p = Runtime.getRuntime().exec(get_ports_cmd);
+ // 2. Create a buffer reader to capture input stream. (Note: we are not capturing error stream
+ // but it can be done)
+ BufferedReader buff = new BufferedReader(new InputStreamReader(p.getInputStream()));
+ String stdIn = null;
+ // 3. Read a line and if it's not null, print it.
+ while ((stdIn = buff.readLine()) != null) {
+ //println(stdIn.toString());
+ serialPortsList.append(stdIn.toString());
+ }
+ // 4. Check the exit code to be 100% sure, the command ran successfully (exitCode 0)
+ int exitVal = p.waitFor();
+ println("Serial Ports list command's EXIT CODE:\t", str(exitVal));
+ buff.close();
+ }
+ catch (Exception e) {
+ //println("Running Serial Ports list command had exceptions");
+ serialPortsList = null;
+ }
+ return serialPortsList;
+ }
+ */
 
 
 
@@ -230,20 +237,34 @@ boolean openSerialPort(String portName, int baudRate) {
 
 StringList currPorts() {
   StringList serialPortsList = new StringList();
-  //// For Linux -> **Spl method due to bug for which Serial.list() doesn't work in linux
-  //if (OS() == 1) {
-  //  //printArray(get_serial_ports_in_linux());
-  //  serialPortsList = getSerialPortsInLinux();
-  //}
-  //// For mac and win
-  //if (OS() == 0 || OS() == 2) {
-  //  for (int i=0; i<Serial.list().length; i++ ) {
-  //    serialPortsList.append(Serial.list()[i]);
-  //  }
-  //}
+  /*
+   AS OF MAY-2022, if using Processing 4.0b8, the serial library is broken for Linux. 
+   Specifically Serial.list() method doesn't list al; available serial ports in LInux.
+   So you want to use 4.0b8 version of IDE, anyways in Linux, Un comment the below block. 
+   */
+  /*
+  // For Linux -> **Spl method due to bug for which Serial.list() doesn't work in linux
+   if (OS() == 1) {
+   //printArray(get_serial_ports_in_linux());
+   serialPortsList = getSerialPortsInLinux();
+   }
+   // For mac and win
+   if (OS() == 0 || OS() == 2) {
+   for (int i=0; i<Serial.list().length; i++ ) {
+   serialPortsList.append(Serial.list()[i]);
+   }
+   }
+   */
+  /*
+   AS OF MAY-2022, if using Processing 3.5.4, the serial library is working for Linux. 
+   Specifically Serial.list() method correctly lists all available serial ports in Linux.
+   So you want to use 3.5.4 version of IDE, in Linux (Recommened until seril bug is foxed in Ver 4.X), 
+   Comment out this for loop block below
+   */
   for (int i=0; i<Serial.list().length; i++ ) {
     serialPortsList.append(Serial.list()[i]);
   }
+
   return serialPortsList;
 }
 
