@@ -55,8 +55,6 @@ void setup() {
   //viewFont = loadFont("ABCDiatype-Light-14.vlw");
   //textFont(viewFont, 14);
   smooth();
-  
-  //thread("watchSerialStatus");
 }
 
 
