@@ -38,6 +38,7 @@ So we need a Debug serial port (currently which is different than flashing port)
 7. Select your Serial Debug port from it's respective dropdown list. 
 8. Click on the <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/5.x/svgs/solid/file.svg" width="20" height="20"> to select the test firmware binary i.e. [watch_firmware.hex](https://watchfirmware.s3.ap-northeast-1.amazonaws.com/watch_firmware.hex) (from the location where you downloaded it)
 9. When ready, click on the <img src="https://raw.githubusercontent.com/FortAwesome/Font-Awesome/5.x/svgs/solid/arrow-right.svg" width="20" height="20"> to flash the test firmware. 
+10. After the flashing is done, in 10 seconds, the board will start spitting out test results and data over serial. So pay attention and follow the on-screen prompts.  
 
 ### To Flash production firmware:
 Depending on the usecase, the firmware typically should not have any serial debug logs coming from it, unless that's intended. If it is so intended as the later use-case, Then to flash and test even the production firmware, you can use the methods from last step. 
