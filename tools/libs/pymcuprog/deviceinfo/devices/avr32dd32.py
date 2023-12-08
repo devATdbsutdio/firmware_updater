@@ -1,20 +1,19 @@
 
 """
-Required device info for the avr32db48 devices
+Required device info for the avr32d32 devices
 The following data would normally have been collected from device packs.
-But since Microchip hasn't done this, and his users were complaining,
- it was deduced from device packs by Spence Konde.
+But since Microchip hasn't done this, it was deduced from device packs by Spence Konde.
 """
 
 from pymcuprog.deviceinfo.eraseflags import ChiperaseEffect
 
 DEVICE_INFO = {
-    'name': 'avr32db48',
+    'name': 'avr32dd32',
     'architecture': 'avr8x',
 
     # eeprom
     'eeprom_address_byte': 0x00001400,
-    'eeprom_size_bytes': 0x0200,
+    'eeprom_size_bytes': 0x0100,
     'eeprom_page_size_bytes': 0x1,
     'eeprom_read_size_bytes': 1,
     'eeprom_write_size_bytes': 1,
@@ -31,7 +30,7 @@ DEVICE_INFO = {
     'fuses_isolated_erase': False,
 
     # internal_sram
-    'internal_sram_address_byte': 0x7000,
+    'internal_sram_address_byte': 0x6000,
     'internal_sram_size_bytes': 0x1000,
     'internal_sram_page_size_bytes': 1,
     'internal_sram_read_size_bytes': 1,
@@ -68,7 +67,7 @@ DEVICE_INFO = {
 
     # flash
     'flash_address_byte': 0x00800000,
-    'flash_size_bytes': 0x8000,
+    'flash_size_bytes': 0x10000,
     'flash_page_size_bytes': 0x200,
     'flash_read_size_bytes': 2,
     'flash_write_size_bytes': 2,
@@ -82,5 +81,5 @@ DEVICE_INFO = {
     'interface': 'UPDI',
     'address_size': '24-bit',
     'prog_clock_khz': 1800,
-    'device_id': 0x1E9535,
+    'device_id': 0x1E9538,
 }

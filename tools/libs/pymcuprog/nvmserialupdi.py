@@ -11,6 +11,7 @@ from .deviceinfo import deviceinfo
 from .deviceinfo.deviceinfokeys import DeviceInfoKeysAvr, DeviceMemoryInfoKeys
 from .deviceinfo.memorynames import MemoryNames
 from .serialupdi.application import UpdiApplication
+from .pymcuprog_errors import PymcuprogDeviceLockedError
 
 import math
 
@@ -44,7 +45,7 @@ class NvmAccessProviderSerial(NvmAccessProvider):
     NVM Access the Python AVR way
     """
 
-    def __init__(self, port, device_info, baud):
+    def __init__(self, port, device_info, baud, options=None):
         self.avr = None
         NvmAccessProvider.__init__(self, device_info)
         if not baud:
@@ -55,9 +56,11 @@ class NvmAccessProviderSerial(NvmAccessProvider):
 
         self.avr.read_device_info()
         try:
-            self.avr.enter_progmode()
+            chip_erase_locked_device = options and options.get("chip-erase-locked-device", False)
+            self.avr.enter_progmode(chip_erase_locked_device)
         except IOError as inst:
             self.logger.error("Device is locked.\nError:\n%s", inst)
+            raise PymcuprogDeviceLockedError()
 
     def read_device_id(self):
         """
@@ -127,6 +130,7 @@ class NvmAccessProviderSerial(NvmAccessProvider):
                 write_chunk_size = len(data_aligned)
             chunk = data_aligned[0:write_chunk_size]
             self.logger.debug("Writing %d bytes to address 0x%06X", write_chunk_size, offset_aligned)
+            self.logger.debug(memtype_string);
             if memtype_string == MemoryNames.FUSES:
                 self.avr.nvm.write_fuse(offset_aligned, chunk)
             elif memtype_string == MemoryNames.EEPROM:
@@ -184,7 +188,7 @@ class NvmAccessProviderSerial(NvmAccessProvider):
         :param memory_info: dictionary for the memory as provided by the DeviceMemoryInfo class
         :param offset: relative offset in the memory type
         :param numbytes: number of bytes to read
-        :param max_read_chunk: memory is read im chunks of up to 512b at a time. The -rc parameter can shrink this if needed for compatibility with certain hardware. 
+        :param max_read_chunk: memory is read im chunks of up to 512b at a time. The -rc parameter can shrink this if needed for compatibility with certain hardware.
         :return: array of bytes read
         """
         offset += memory_info[DeviceMemoryInfoKeys.ADDRESS]
