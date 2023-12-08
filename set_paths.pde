@@ -21,11 +21,15 @@ String[] flash_cmd = {
   uploadPortName, 
   "-b", 
   "921600", 
+  "-wd",
+  "1",
   "-d", 
   "attiny1607", 
-  "--fuses", 
+  "--fuses",
+  "0:0b00000000",
   "2:0x02", 
-  "6:0x00", 
+  "6:0x00",
+  "7:0x00",
   "8:0x00", 
   "-f", 
   binHexFilePath, 
@@ -226,7 +230,7 @@ void binaryFileSelected(File selection) {
     binFileLabel.setText(binHexFileName);
 
     // Update binary PATH in flash command
-    flash_cmd[16] = binHexFilePath;
+    flash_cmd[20] = binHexFilePath;
 
     enableFlashing = true;
   }
@@ -277,7 +281,7 @@ void loadAndSetBinaryFilePath(String filename) {
     binFileLabel.setText(binHexFileName);
 
     // Update binary PATH in flash command
-    flash_cmd[16] = binHexFilePath;
+    flash_cmd[20] = binHexFilePath;
 
     enableFlashing = true;
   }

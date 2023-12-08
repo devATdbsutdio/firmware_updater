@@ -97,10 +97,10 @@ void run_cmd() {
   }
 
   // Also Check if flashing firmware truely exists
-  File f = new File(flash_cmd[16]);
+  File f = new File(flash_cmd[20]);
   if (!f.exists()) {
     println("\n[WARNING]");
-    println("Previously used file", flash_cmd[16], "doesn't exist!");
+    println("Previously used file", flash_cmd[20], "doesn't exist!");
     println("And you tried to flash!");
     println("So we are stopping this attempt to flash firmware file");
     println("\nReload the firmware file to flash");
